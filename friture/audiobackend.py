@@ -19,6 +19,7 @@
 
 import logging
 import math
+import os
 import time
 
 from PyQt6 import QtCore
@@ -342,7 +343,11 @@ class __AudioBackend(QtCore.QObject):
 
     # method
     def open_stream(self, device):
-        self.log_supported_input_formats(device)
+        # Probing every sample rate and sample format combination makes
+        # PortAudio segfault on some ALSA configurations, and the probe only
+        # produces a log line that nothing else reads, so it is opt-in.
+        if os.environ.get("FRITURE_PROBE_FORMATS"):
+            self.log_supported_input_formats(device)
 
         self.logger.info("Opening the stream for device '%s'", device['name'])
 
