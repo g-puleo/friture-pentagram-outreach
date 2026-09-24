@@ -38,6 +38,7 @@ from friture.spectrogram_settings import (Spectrogram_Settings_Dialog,  # settin
                                           DEFAULT_TIMERANGE,
                                           DEFAULT_WEIGHTING)
 import friture.plotting.frequency_scales as fscales
+from friture import pentagram
 
 from friture.audiobackend import SAMPLING_RATE, FRAMES_PER_BUFFER, AudioBackend
 from fractions import Fraction
@@ -82,6 +83,7 @@ class Spectrogram_Widget(QObject):
         self.freq = self.proc.get_freq_scale()
         self.frequency_resampler.setfreq(self.freq)
 
+        self.freqscale = fscales.Mel
         self.setfreqscale(fscales.Mel) # matches DEFAULT_FREQ_SCALE = 2 # Mel
         self.frequency_resampler.setfreqrange(self.minfreq, self.maxfreq)
 
@@ -102,6 +104,9 @@ class Spectrogram_Widget(QObject):
 
         # initialize the settings dialog
         self.settings_dialog = Spectrogram_Settings_Dialog(parent, self)
+
+        self.pentagram_mode = False
+        self.PlotZoneImage.pentagram_toggled.connect(self.set_pentagram_mode)
 
         self.mustRestart = False
 
@@ -215,6 +220,7 @@ class Spectrogram_Widget(QObject):
         self.frequency_resampler.setfreq(self.freq)
     
     def setfreqscale(self, freqscale):
+        self.freqscale = freqscale
         self.PlotZoneImage.setfreqscale(freqscale)
         self.frequency_resampler.setfreqscale(freqscale)
 
@@ -258,14 +264,39 @@ class Spectrogram_Widget(QObject):
             self.w = C
         self.w.shape = (len(self.w), 1)
 
+    def set_pentagram_mode(self, enabled):
+        if enabled == self.pentagram_mode:
+            return
+        self.pentagram_mode = enabled
+        self.PlotZoneImage.setpentagram(enabled)
+
+        if enabled:
+            # show the grand staff on a log2 frequency scale, so that lines
+            # sit at their true frequencies
+            self.setfreqscale(pentagram.PENTAGRAM_SCALE)
+            self.setminfreq(pentagram.PENTAGRAM_MINFREQ)
+            self.setmaxfreq(pentagram.PENTAGRAM_MAXFREQ)
+            self.setfftsize(self.settings_fft_size() * pentagram.PENTAGRAM_FFT_SIZE_FACTOR)
+        else:
+            # go back to the frequency settings chosen in the settings dialog
+            self.setfreqscale(fscales.ALL[self.settings_dialog.comboBox_freqscale.currentIndex()])
+            self.setminfreq(self.settings_dialog.spinBox_minfreq.value())
+            self.setmaxfreq(self.settings_dialog.spinBox_maxfreq.value())
+            self.setfftsize(self.settings_fft_size())
+
+    def settings_fft_size(self):
+        return 2 ** self.settings_dialog.comboBox_fftsize.currentIndex() * 32
+
     def settings_called(self, checked):
         self.settings_dialog.show()
 
     def saveState(self, settings):
         self.settings_dialog.saveState(settings)
+        settings.setValue("pentagramMode", self.pentagram_mode)
 
     def restoreState(self, settings):
         self.settings_dialog.restoreState(settings)
+        self.set_pentagram_mode(settings.value("pentagramMode", False, type=bool))
 
     # slot
     def timerangechanged(self, value):

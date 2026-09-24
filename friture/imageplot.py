@@ -23,6 +23,8 @@ from friture.spectrogram_data import Spectrogram_Data
 from friture.spectrogram_item_data import SpectrogramImageData
 from friture.store import GetStore
 from friture.pitch_tracker import format_frequency
+from friture import pentagram
+import friture.plotting.frequency_scales as fscales
 
 class ImagePlot(QObject):
 
@@ -47,6 +49,12 @@ class ImagePlot(QObject):
         self._spectrogram_data.horizontal_axis.setRange(0, 10)
         self._spectrogram_data.color_axis.setRange(-140, 0)
         self._spectrogram_data.show_color_axis = True
+
+        self._minfreq = 20.
+        self._maxfreq = 20000.
+        self._freqscale = fscales.Linear
+        self.pentagram_toggled = self._spectrogram_data.pentagram_toggled
+        self._update_staff_lines()
 
     def qml_file_name(self):
         return "ImagePlot.qml"
@@ -78,6 +86,8 @@ class ImagePlot(QObject):
     def setfreqscale(self, scale):        
         self._spectrogram_data.vertical_axis.setScale(scale)
         self._spectrogram_item.erase()
+        self._freqscale = scale
+        self._update_staff_lines()
 
     def settimerange(self, timerange_seconds, dT_seconds):
         self._spectrogram_data.horizontal_axis.setRange(0, timerange_seconds)
@@ -88,6 +98,15 @@ class ImagePlot(QObject):
             minfreq, maxfreq = maxfreq, minfreq
 
         self._spectrogram_data.vertical_axis.setRange(minfreq, maxfreq)
+        self._minfreq = minfreq
+        self._maxfreq = maxfreq
+        self._update_staff_lines()
+
+    def setpentagram(self, enabled):
+        self._spectrogram_data.pentagram_enabled = enabled
+
+    def _update_staff_lines(self):
+        self._spectrogram_data.staff_lines = pentagram.staff_lines(self._minfreq, self._maxfreq, self._freqscale)
 
     def setspecrange(self, spec_min, spec_max):
         if spec_min > spec_max:

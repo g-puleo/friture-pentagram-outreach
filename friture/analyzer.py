@@ -65,6 +65,7 @@ from friture.plotting.scaleDivision import ScaleDivision, Tick
 from friture.spectrogram_item import SpectrogramItem
 from friture.spectrogram_item_data import SpectrogramImageData
 from friture.spectrum_data import Spectrum_Data
+from friture.spectrogram_data import Spectrogram_Data
 from friture.plotFilledCurve import PlotFilledCurve
 from friture.filled_curve import FilledCurve
 from friture.qml_tools import qml_url, view_raise_if_error
@@ -113,6 +114,7 @@ class Friture(QMainWindow, ):
         qmlRegisterType(CoordinateTransform, 'Friture', 1, 0, 'CoordinateTransform')
         qmlRegisterType(Scope_Data, 'Friture', 1, 0, 'ScopeData')
         qmlRegisterType(Spectrum_Data, 'Friture', 1, 0, 'SpectrumData')
+        qmlRegisterType(Spectrogram_Data, 'Friture', 1, 0, 'SpectrogramData')
         qmlRegisterType(LevelData, 'Friture', 1, 0, 'LevelData')
         qmlRegisterType(LevelViewModel, 'Friture', 1, 0, 'LevelViewModel')
         qmlRegisterType(PlaybackControlViewModel, 'Friture', 1, 0, 'PlaybackControlViewModel')
