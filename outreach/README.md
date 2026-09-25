@@ -10,28 +10,52 @@ borrows Friture's spectrogram pipeline for teaching purposes, and nothing in the
 
 ## Running it
 
-Open `che-suono-e.html` in any modern browser. There is no build step, no server
-and no install.
+**At an event, use `che-suono-e.offline.html`.** It is a single self-contained
+file with the fonts and the recordings embedded, so it needs no network and no
+server. Copy it to a USB stick and it works anywhere.
 
-For an event machine with no network, use `che-suono-e.offline.html` instead — it
-is the same page with the fonts embedded, so it needs nothing at all. Copy it to a
-USB stick and it will work anywhere.
+`che-suono-e.html` is the source, and it reads its recordings from `sounds/`.
+Browsers refuse to `fetch` from `sounds/` when a page is opened straight from
+disk as a `file://` URL, so opening it that way falls back to the synthesized
+sounds and shows a notice saying so. To work on it, serve it:
+
+    cd outreach && python3 -m http.server
+    # then open http://localhost:8000/che-suono-e.html
 
 ## The sounds
 
-All seven are synthesized by the page itself, in plain JavaScript, at 22,050 Hz
-for 4 seconds each: a hand clap, rain, a bird chirping, the GW170817 neutron star
-merger, an orchestra, a sneeze and a whistle. Nothing is loaded from disk or from
-the network.
+Seven, all 4 seconds at 22,050 Hz. Five are synthesized by the page itself in
+plain JavaScript — a hand clap, rain, a bird chirping, an orchestra and a
+whistle. Two are real recordings loaded from `sounds/`; see `sounds/CREDITS.md`
+for their provenance and licences.
 
-GW170817 follows the Newtonian inspiral law, `f(t) = f0 (1 - t/tc)^(-3/8)` with
-amplitude proportional to `f^(2/3)`, over a synthetic detector noise floor. It is
-sped up and shifted upward in frequency so that it both fits in four seconds and
-reproduces on laptop speakers — the page says so on the card.
+Each entry in the `SOUNDS` array carries an `id`, a `synth()` function, and
+optionally a `src` (a file under `sounds/`) plus a `fit` mode saying how to cut
+it down to the four-second slot — `peak` centres on the loudest moment, `end`
+keeps the tail. When `src` is present the page fetches and decodes it, resampling
+through a 22,050 Hz `OfflineAudioContext`; **if that fails for any reason it
+falls back to `synth()`**, so the game always works. To swap in another recording,
+drop a file in `sounds/` and set `src`; no game logic changes.
 
-To replace a synthesized sound with a real recording, each entry in the `SOUNDS`
-array carries an `id`, a `synth()` function and a `src` field. Set `src` to a file
-URL and the page decodes that instead of calling `synth()`; no game logic changes.
+### A warning about the GW170817 card
+
+`sounds/gw170817-h1.ogg` is the real event: LIGO-Hanford strain, whitened by the
+Hanford spectral density, band-passed to 30–400 Hz, sped up 3×. Regenerate it
+from GWOSC with `python3 outreach/make-gw170817.py`.
+
+**It does not show a chirp, and it is not supposed to.** GW170817's
+signal-to-noise ratio is accumulated by matched filtering over roughly 100 s in
+band, so in any individual time-frequency pixel the signal sits below the noise.
+The card reads as a sharp-edged band of noise between about 90 Hz and 1.2 kHz —
+the band-pass limits — with nothing above. That distinguishes it from the rain
+card, which fills the full height, but it is a card that visitors will find hard
+to guess. The blurb turns this into the teaching point: this is why gravitational
+wave astronomy needs matched filtering, and why the GW Open Data Workshop
+tutorial reaches for a Q-transform at Q≈100 to make the track visible.
+
+`synthGW()` remains in the page as a model waveform built from the event's real
+parameters. It is what you get if the recording fails to load, and reverting the
+card to it is a one-line change: delete the `src` on the `gw` descriptor.
 
 ## The spectrograms
 
@@ -54,19 +78,29 @@ well side by side.
 
 ## Rebuilding the offline file
 
-`che-suono-e.offline.html` is generated. After editing `che-suono-e.html`, run:
+`che-suono-e.offline.html` is generated. After editing `che-suono-e.html` or
+changing anything in `sounds/`, run:
 
     python3 outreach/build-offline.py
 
-It downloads the IBM Plex latin and latin-ext subsets from Google Fonts and
-embeds them as data URIs. A network connection is needed for the build, never to
-run the result.
+It embeds the IBM Plex latin and latin-ext subsets from Google Fonts and every
+`sounds/` file as data URIs, and refuses to write a file that would still need a
+network. A connection is needed for the build, never to run the result.
 
 ## Licensing
 
 The page itself is part of Friture and is under the GNU GPL v3, like the rest of
-the repository.
+the repository. The embedded and bundled third-party material is not:
 
-`che-suono-e.offline.html` embeds the IBM Plex fonts, which are licensed under the
-SIL Open Font License 1.1 — see `IBM-Plex-OFL.txt`. The OFL permits this
-redistribution; the fonts remain under their own licence, not the GPL.
+| What | Licence |
+|---|---|
+| IBM Plex, embedded in the offline build | SIL Open Font License 1.1 — see `IBM-Plex-OFL.txt` |
+| `sounds/sneeze.ogg` | Public domain (Wikimedia Commons) |
+| `sounds/gw170817-h1.ogg`, derived from LIGO open data | CC BY 4.0 (GWOSC) |
+
+GWOSC asks that use of their data be acknowledged, and the page carries the
+acknowledgement in its footer:
+
+> This research has made use of data obtained from the Gravitational Wave Open
+> Science Center (gwosc.org), a service of the LIGO Scientific Collaboration, the
+> Virgo Collaboration, and KAGRA.

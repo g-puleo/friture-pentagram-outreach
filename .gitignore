@@ -47,3 +47,5 @@ Notepad++
 # Macos
 .DS_Store
 *.dmg
+# GWOSC strain cache, re-downloaded by outreach/make-gw170817.py
+outreach/*.hdf5

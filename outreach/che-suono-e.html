@@ -237,6 +237,13 @@ footer{
   font-family:var(--mono);font-size:11.5px;line-height:1.7;color:var(--faint);letter-spacing:.02em;
 }
 
+.notice{
+  margin:0 0 20px;padding:12px 15px;border-radius:0 8px 8px 0;
+  border:1px solid var(--line);border-left:3px solid var(--bad);
+  background:var(--panel);font-size:.9rem;
+}
+.notice .s{color:var(--faint);font-style:italic}
+
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
 @media (max-width:1040px){
@@ -795,18 +802,18 @@ const SOUNDS = [
     name: ["Cinguettio di un uccello", "A bird chirping"],
     blurb: ["Il richiamo è una modulazione di frequenza rapidissima fra 2 e 6 kHz: tratti curvi, sottili, in alto nell'immagine.",
             "The call is a very fast frequency modulation between 2 and 6 kHz: thin curved strokes, high up in the image."] },
-  { id: "gw", dr: 66, synth: synthGW,
+  { id: "gw", dr: 66, synth: synthGW, src: "sounds/gw170817-h1.ogg", fit: "end",
     name: ["Fusione di due stelle di neutroni (GW170817)", "Neutron star merger (GW170817)"],
-    blurb: ["Due stelle di neutroni a 130 milioni di anni luce. Mentre spiraleggiano l'una verso l'altra la frequenza sale come f ∝ (t_c − t)^(−3/8): è il chirp. Massa di chirp ≈ 1,188 M☉. Qui il segnale è accelerato e traslato verso l'alto per renderlo udibile; le righe orizzontali sottili sono rumore strumentale.",
-            "Two neutron stars 130 million light years away. As they spiral together the frequency climbs as f ∝ (t_c − t)^(−3/8) — the chirp. Chirp mass ≈ 1.188 M☉. The signal is sped up and shifted upward here to make it audible; the thin horizontal lines are instrumental noise."] },
+    blurb: ["Due stelle di neutroni a 130 milioni di anni luce, osservate il 17 agosto 2017. Questa è la deformazione vera misurata da LIGO-Hanford: sbiancata con la densità spettrale di Hanford, filtrata fra 30 e 400 Hz, accelerata 4 volte. Il chirp non si vede — e non è un errore. Il rapporto segnale-rumore di GW170817 si accumula su un centinaio di secondi di filtro adattato, quindi in ogni singolo pixel tempo-frequenza il segnale sta sotto il rumore. Per farlo emergere serve una trasformata Q.",
+            "Two neutron stars 130 million light years away, observed on 17 August 2017. This is the real strain measured by LIGO-Hanford: whitened by the Hanford spectral density, band-passed to 30-400 Hz, sped up 4x. The chirp is not visible — and that is not a mistake. GW170817's signal-to-noise ratio accumulates over some hundred seconds of matched filtering, so in any single time-frequency pixel the signal sits below the noise. Revealing it takes a Q-transform."] },
   { id: "orchestra", dr: 64, synth: synthOrchestra,
     name: ["Un'orchestra", "An orchestra"],
     blurb: ["Ogni nota è una fondamentale più i suoi armonici: righe orizzontali equispaziate, che ondeggiano leggermente per via del vibrato.",
             "Each note is a fundamental plus its harmonics: evenly spaced horizontal lines, wavering slightly with the vibrato."] },
-  { id: "sneeze", dr: 78, synth: synthSneeze,
+  { id: "sneeze", dr: 78, synth: synthSneeze, src: "sounds/sneeze.ogg", fit: "peak",
     name: ["Uno starnuto", "A sneeze"],
-    blurb: ["Prima l'inspirazione, che sale di frequenza; poi l'esplosione, larga in frequenza e modellata dalle formanti del tratto vocale.",
-            "First the intake of breath, sweeping upward; then the burst, broad in frequency and shaped by the formants of the vocal tract."] },
+    blurb: ["Una registrazione vera di due starnuti. Prima l'inspirazione, che sale di frequenza; poi l'esplosione, larga in frequenza e modellata dalle formanti del tratto vocale.",
+            "A real recording of two sneezes. First the intake of breath, sweeping upward; then the burst, broad in frequency and shaped by the formants of the vocal tract."] },
   { id: "whistle", dr: 74, synth: synthWhistle,
     name: ["Un fischio", "A whistle"],
     blurb: ["Quasi una sinusoide pura: quasi nessun armonico, una sola riga sottile e brillante che scivola da una nota all'altra.",
@@ -839,8 +846,12 @@ const T = {
   ],
   colophon1: ["Spettrogrammi calcolati nel browser a partire dall'audio che ascolti: FFT a 1024 punti, finestra di Hann, sovrapposizione del 75%, asse delle frequenze in scala Mel, mappa di colore CMRmap — la stessa catena di elaborazione di Friture.",
               "Spectrograms computed in the browser from the very audio you hear: 1024-point FFT, Hann window, 75% overlap, Mel frequency axis, CMRmap colour table — the same processing chain as Friture."],
-  colophon2: ["I suoni sono sintetizzati. GW170817 segue la vera legge di chirp newtoniana, accelerata e traslata in frequenza per renderla udibile.",
-              "The sounds are synthesized. GW170817 follows the real Newtonian chirp law, sped up and frequency-shifted to make it audible."]
+  colophon2: ["Cinque suoni sono sintetizzati. Lo starnuto è una registrazione vera (Wikimedia Commons, pubblico dominio). GW170817 è la deformazione vera misurata da LIGO-Hanford (GWOSC, CC BY 4.0), sbiancata, filtrata in banda e accelerata quattro volte.",
+              "Five of the sounds are synthesized. The sneeze is a real recording (Wikimedia Commons, public domain). GW170817 is the real strain measured by LIGO-Hanford (GWOSC, CC BY 4.0), whitened, band-passed and sped up four times."],
+  colophon3: ["Questa ricerca ha utilizzato dati ottenuti dal Gravitational Wave Open Science Center (gwosc.org), un servizio della LIGO Scientific Collaboration, della Virgo Collaboration e di KAGRA.",
+              "This research has made use of data obtained from the Gravitational Wave Open Science Center (gwosc.org), a service of the LIGO Scientific Collaboration, the Virgo Collaboration, and KAGRA."],
+  srcfail: ["Le registrazioni non si sono caricate, quindi starnuto e GW170817 sono qui sintetizzati. Aprendo il file direttamente dal disco il browser blocca la lettura della cartella sounds/: usa il file offline, oppure servi la pagina con  python3 -m http.server.",
+            "The recordings did not load, so the sneeze and GW170817 are synthesized here. Opening the file straight from disk makes the browser block reads from sounds/: use the offline build, or serve the page with  python3 -m http.server."]
 };
 
 /* =========================================================================
@@ -1050,8 +1061,8 @@ function renderStatic(){
   els.submit.innerHTML = bi(T.submit, true);
   els.revealall.innerHTML = bi(T.revealAll, true);
   els.again.innerHTML = bi(T.again, true);
-  els.colophon.innerHTML = "<div>" + prim(T.colophon1) + "</div><div>" + sec(T.colophon1) +
-                           "</div><div style='margin-top:.7em'>" + prim(T.colophon2) + "</div><div>" + sec(T.colophon2) + "</div>";
+  els.colophon.innerHTML = [T.colophon1, T.colophon2, T.colophon3].map((c, i) =>
+    "<div" + (i ? " style='margin-top:.7em'" : "") + ">" + esc(prim(c)) + "</div><div>" + esc(sec(c)) + "</div>").join("");
 }
 
 function renderGame(){
@@ -1136,17 +1147,78 @@ function setLang(l){ lang = l; renderStatic(); renderGame(); }
 
 /* ---------- generation ---------- */
 
-function generate(){
-  let i = 0;
-  const next = () => {
-    if (i >= SOUNDS.length) return;
-    const s = SOUNDS[i++];
-    bufCache[s.id] = s.synth();
+function decodeAudio(octx, bytes){
+  return new Promise((resolve, reject) => {
+    const maybe = octx.decodeAudioData(bytes, resolve, reject);   // Safari wants callbacks
+    if (maybe && typeof maybe.then === "function") maybe.then(resolve, reject);
+  });
+}
+
+/* trim or pad a decoded recording into the 4 s slot every card uses */
+function fitBuffer(x, mode){
+  let y;
+  if (x.length >= NS){
+    let start = 0;
+    if (mode === "peak"){                      // centre on the loudest 0.1 s
+      const k = Math.round(SR * 0.1);
+      let acc = 0;
+      for (let i = 0; i < k && i < x.length; i++) acc += x[i] * x[i];
+      let best = acc, at = 0;
+      for (let i = k; i < x.length; i++){
+        acc += x[i] * x[i] - x[i - k] * x[i - k];
+        if (acc > best){ best = acc; at = i - k; }
+      }
+      start = Math.max(0, Math.min(x.length - NS, at - (NS >> 1)));
+    } else if (mode === "end"){
+      start = x.length - NS;
+    }
+    y = x.slice(start, start + NS);
+  } else {
+    y = new Float32Array(NS);
+    y.set(x, Math.min(Math.round(0.25 * SR), NS - x.length));
+  }
+  return finish(y, 0.92);
+}
+
+async function loadSound(s){
+  const res = await fetch(s.src);
+  if (!res.ok) throw new Error(s.src + ": HTTP " + res.status);
+  const bytes = await res.arrayBuffer();
+  // decoding through a 22050 Hz context resamples the file to the game's rate
+  const OAC = window.OfflineAudioContext || window.webkitOfflineAudioContext;
+  const ab = await decodeAudio(new OAC(1, NS, SR), bytes);
+  const n = ab.length, ch = ab.numberOfChannels, mono = new Float32Array(n);
+  for (let c = 0; c < ch; c++){
+    const d = ab.getChannelData(c);
+    for (let i = 0; i < n; i++) mono[i] += d[i];
+  }
+  if (ch > 1) for (let i = 0; i < n; i++) mono[i] /= ch;
+  return fitBuffer(mono, s.fit);
+}
+
+function noticeSrcFailed(){
+  if (document.getElementById("srcfail")) return;
+  const d = document.createElement("div");
+  d.className = "notice"; d.id = "srcfail";
+  d.innerHTML = bi(T.srcfail);
+  document.querySelector(".game").before(d);
+}
+
+async function generate(){
+  let failed = false;
+  for (const s of SOUNDS){
+    let buf = null;
+    if (s.src){
+      try { buf = await loadSound(s); }
+      catch (err){ console.warn("using the synthesized " + s.id + " instead", err); failed = true; }
+    }
+    bufCache[s.id] = buf || s.synth();
     specCache[s.id] = spectrogram(bufCache[s.id], s.dr);
-    for (let c = 0; c < 7; c++) if (state.order[c] !== undefined && SOUNDS[state.order[c]].id === s.id) paintOne(c);
-    requestAnimationFrame(next);
-  };
-  requestAnimationFrame(next);
+    for (let c = 0; c < 7; c++)
+      if (state.order[c] !== undefined && SOUNDS[state.order[c]].id === s.id) paintOne(c);
+    await new Promise(r => requestAnimationFrame(r));
+  }
+  if (failed) noticeSrcFailed();
 }
 
 /* ---------- wiring ---------- */

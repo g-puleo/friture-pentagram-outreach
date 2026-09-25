@@ -17,9 +17,13 @@
 
 """Build the single-file offline version of the spectrogram game.
 
-che-suono-e.html pulls IBM Plex from Google Fonts, which needs a network.
-Outreach machines often have none, so this downloads the latin and latin-ext
-subsets once and embeds them as data: URIs, producing a page that needs
+che-suono-e.html pulls IBM Plex from Google Fonts and reads its two real
+recordings from sounds/. Neither works at an outreach event: the machine often
+has no network, and browsers refuse to fetch sounds/ when the page is opened
+straight from disk as a file:// URL.
+
+This embeds both — the latin and latin-ext font subsets, downloaded once, and
+the recordings from sounds/ — as data: URIs, producing a page that needs
 nothing but a browser.
 
     python3 outreach/build-offline.py
@@ -55,6 +59,9 @@ LINK_RE = re.compile(
     r'[ \t]*<link rel="stylesheet" href="(?P<url>https://fonts\.googleapis\.com/css2\?[^"]+)">\n')
 
 FACE_RE = re.compile(r"/\*\s*(?P<subset>[\w-]+)\s*\*/\s*(?P<face>@font-face\s*\{.*?\})", re.S)
+AUDIO_RE = re.compile(r'src: "(?P<path>sounds/[^"]+)"')
+AUDIO_TYPES = {".ogg": "audio/ogg", ".mp3": "audio/mpeg", ".wav": "audio/wav",
+               ".flac": "audio/flac", ".m4a": "audio/mp4", ".opus": "audio/ogg"}
 WOFF2_RE = re.compile(r"url\((?P<url>https://fonts\.gstatic\.com/[^)]+\.woff2)\)\s*format\('woff2'\)")
 
 
@@ -87,6 +94,31 @@ def inline_fonts(css_url: str) -> str:
     return "\n".join(faces)
 
 
+def inline_audio(html: str) -> str:
+    """Replace each  src: "sounds/x.ogg"  with the file as a data: URI."""
+    total = [0, 0]
+
+    def swap(match: "re.Match[str]") -> str:
+        rel = match.group("path")
+        path = os.path.join(HERE, rel)
+        ext = os.path.splitext(path)[1].lower()
+        if ext not in AUDIO_TYPES:
+            raise SystemExit("unknown audio type for %s" % rel)
+        with open(path, "rb") as fh:
+            data = fh.read()
+        total[0] += 1
+        total[1] += len(data)
+        print("  %s (%.0f KB)" % (rel, len(data) / 1024))
+        return 'src: "data:%s;base64,%s"' % (AUDIO_TYPES[ext],
+                                             base64.b64encode(data).decode("ascii"))
+
+    out = AUDIO_RE.sub(swap, html)
+    if total[0] == 0:
+        raise SystemExit("no sounds/ references found; has the page changed?")
+    print("  %d recordings, %.0f KB" % (total[0], total[1] / 1024))
+    return out
+
+
 def main() -> int:
     print("reading %s" % os.path.relpath(SOURCE))
     html = io.open(SOURCE, encoding="utf-8").read()
@@ -101,6 +133,11 @@ def main() -> int:
 
     if "https://fonts." in html:
         raise SystemExit("a font request survived; the page would still need a network")
+
+    print("embedding recordings from sounds/")
+    html = inline_audio(html)
+    if AUDIO_RE.search(html):
+        raise SystemExit("a sounds/ reference survived; the page would still need them")
 
     io.open(TARGET, "w", encoding="utf-8").write(html)
     print("wrote %s (%.0f KB, no network required)"
