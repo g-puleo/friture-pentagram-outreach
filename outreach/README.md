@@ -24,16 +24,17 @@ sounds and shows a notice saying so. To work on it, serve it:
 
 ## The sounds
 
-Seven, all 4 seconds at 22,050 Hz. Five are real recordings loaded from
-`sounds/` — a Northern cardinal, rain, GW170817, the opening of Beethoven's
-Fifth, and a sneeze. Two are synthesized by the page itself in plain
-JavaScript — the hand clap and the whistle. See `sounds/CREDITS.md` for the
+Seven, all 4 seconds at 22,050 Hz. Four are real recordings loaded from
+`sounds/` — a Northern cardinal, rain, the opening of Beethoven's Fifth, and a
+sneeze. Three are synthesized by the page itself in plain JavaScript — the hand
+clap, the whistle, and GW170817. See `sounds/CREDITS.md` for the
 provenance and licence of every recording; **the cardinal's attribution line is
 still a placeholder** and must be completed before the page is published.
 
-`sounds/gwosc/` holds four GWOSC sonifications that the game does not use, kept
-as alternative material for the GW card; `sounds/CREDITS.md` explains the
-trade-off.
+`sounds/gwosc/` holds four GWOSC sonifications and `sounds/gw170817-h1.ogg`
+holds real processed LIGO-Hanford strain. Neither is used by the game; both are
+kept as alternative material for the GW card, and `sounds/CREDITS.md` explains
+the trade-off.
 
 Each entry in the `SOUNDS` array carries an `id`, a `synth()` function, and
 optionally a `src` (a file under `sounds/`) plus a `fit` mode saying how to cut
@@ -43,25 +44,27 @@ through a 22,050 Hz `OfflineAudioContext`; **if that fails for any reason it
 falls back to `synth()`**, so the game always works. To swap in another recording,
 drop a file in `sounds/` and set `src`; no game logic changes.
 
-### A warning about the GW170817 card
+### About the GW170817 card
 
-`sounds/gw170817-h1.ogg` is the real event: LIGO-Hanford strain, whitened by the
-Hanford spectral density, band-passed to 30–400 Hz, sped up 3×. Regenerate it
-from GWOSC with `python3 outreach/make-gw170817.py`.
+The card is **synthesized** — `synthGW()` builds a Newtonian inspiral from the
+event's real parameters (chirp mass ≈ 1.188 M☉, `f ∝ (t_c − t)^(−3/8)`) over a
+coloured noise floor, sped up and shifted upward to be audible. It shows the
+iconic rising chirp, which is what makes the card teachable.
 
-**It does not show a chirp, and it is not supposed to.** GW170817's
-signal-to-noise ratio is accumulated by matched filtering over roughly 100 s in
-band, so in any individual time-frequency pixel the signal sits below the noise.
-The card reads as a sharp-edged band of noise between about 90 Hz and 1.2 kHz —
-the band-pass limits — with nothing above. That distinguishes it from the rain
-card, which fills the full height, but it is a card that visitors will find hard
-to guess. The blurb turns this into the teaching point: this is why gravitational
-wave astronomy needs matched filtering, and why the GW Open Data Workshop
-tutorial reaches for a Q-transform at Q≈100 to make the track visible.
+It is a model, not a measurement, and the page's colophon says so.
 
-`synthGW()` remains in the page as a model waveform built from the event's real
-parameters. It is what you get if the recording fails to load, and reverting the
-card to it is a one-line change: delete the `src` on the `gw` descriptor.
+`sounds/gw170817-h1.ogg` is the alternative: real LIGO-Hanford strain, whitened
+by the Hanford spectral density, band-passed to 30–400 Hz and sped up 3×.
+Regenerate it from GWOSC with `python3 outreach/make-gw170817.py`. Switching the
+card to it is a one-line change — add `src: "sounds/gw170817-h1.ogg", fit: "end"`
+to the `gw` descriptor and drop `dr` to about 30 — **but be warned that it shows
+no chirp at all.** GW170817's signal-to-noise ratio is accumulated by matched
+filtering over roughly 100 s in band, so in any individual time-frequency pixel
+the signal sits below the noise; the card reads as a sharp-edged band of noise.
+That is physics, not a processing error, and it is exactly why the GW Open Data
+Workshop tutorial reaches for a Q-transform at Q≈100 to make the track visible.
+It makes an honest but very hard card. If you make the swap, restore the GWOSC
+acknowledgement to the page colophon as well.
 
 ## The spectrograms
 
@@ -81,6 +84,27 @@ The one value that is not a straight port is the dynamic range: Friture's fixed
 -140/0 dB suits its own input normalisation, while here each clip sets its floor
 relative to its own peak (the per-sound `dr` field), tuned so that all seven read
 well side by side.
+
+## Visitor statistics
+
+After each submit the page shows how everyone who has played on that machine
+has done: number of rounds, average score, and the per-spectrogram accuracy as
+a sorted bar chart, hardest first, with the most-missed one called out by name.
+
+It is deliberately local. The tally lives in `localStorage` under
+`che-suono-e/stats/v1`, so it accumulates across rounds and survives reloads,
+but it never leaves the machine and there is no server. Two consequences worth
+knowing at an event:
+
+- **Each machine has its own tally.** Two laptops do not pool their numbers.
+- **Storage can be unavailable** — a private window, or a browser set to block
+  site data. Every access is wrapped, and the page falls back to an in-memory
+  tally that lasts as long as the tab stays open, so nothing breaks.
+
+The panel only appears after a visitor submits, never while they are still
+matching, so it cannot hint at an answer. The operator can clear the tally with
+the small **azzera / reset** link in the panel footer, which asks first; do that
+once before the doors open, since testing inflates the numbers.
 
 ## Rebuilding the offline file
 
@@ -105,11 +129,13 @@ the repository. The embedded and bundled third-party material is not:
 | `sounds/rain.ogg` | Public domain (Wikimedia Commons) |
 | `sounds/orchestra-beethoven5.ogg` | Public domain (Wikimedia Commons) |
 | `sounds/sneeze.ogg` | Public domain (Wikimedia Commons) |
-| `sounds/gw170817-h1.ogg`, derived from LIGO open data | CC BY 4.0 (GWOSC) |
-| `sounds/gwosc/*.wav`, not used by the game | CC BY 4.0 (GWOSC) |
+| `sounds/gw170817-h1.ogg` and `sounds/gwosc/*.wav`, neither used by the game | CC BY 4.0 (GWOSC) |
 
-GWOSC asks that use of their data be acknowledged, and the page carries the
-acknowledgement in its footer:
+GWOSC asks that use of their data be acknowledged. The page itself no longer
+uses GWOSC data, so it no longer carries the acknowledgement; the repository
+does ship GWOSC files, so it is recorded here and in `sounds/CREDITS.md`, and it
+must go back into the page colophon if the GW card is ever pointed at one of
+them:
 
 > This research has made use of data obtained from the Gravitational Wave Open
 > Science Center (gwosc.org), a service of the LIGO Scientific Collaboration, the

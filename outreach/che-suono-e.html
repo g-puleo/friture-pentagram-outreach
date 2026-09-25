@@ -232,6 +232,44 @@ h1 .en{display:block;font-size:.45em;font-weight:600;color:var(--faint);letter-s
 .score .hint{margin-top:13px;padding-top:13px;border-top:1px solid var(--line);font-size:.85rem;color:var(--muted)}
 .score .hint .s{color:var(--faint);font-style:italic}
 
+/* visitor statistics, accumulated across rounds on this machine */
+.stats{padding:15px}
+.stats .tally{
+  font-family:var(--mono);font-size:12px;letter-spacing:.03em;color:var(--muted);
+  text-align:center;padding-bottom:13px;margin-bottom:13px;border-bottom:1px solid var(--line);
+  font-variant-numeric:tabular-nums;
+}
+.stats .tally b{color:var(--ink);font-weight:600;font-size:15px}
+.stats .tally .lead{
+  margin-top:7px;font-family:var(--sans);font-size:.82rem;letter-spacing:0;color:var(--accent);
+}
+.stats .tally .lead b{color:var(--accent);font-size:1em}
+.srow{display:grid;grid-template-columns:1fr 92px 46px;gap:10px;align-items:center;margin-bottom:9px}
+.srow:last-child{margin-bottom:0}
+.sname{font-size:.9rem;line-height:1.25;min-width:0}
+.sname span{display:block;color:var(--faint);font-size:.78em;font-style:italic}
+.sbar{height:9px;border-radius:5px;background:var(--panel-2);border:1px solid var(--line);overflow:hidden}
+.sbar i{display:block;height:100%;border-radius:4px;background:var(--accent);transition:width .5s ease}
+.srow.hi .sbar i{background:var(--ok)}
+.srow.lo .sbar i{background:var(--bad)}
+.spct{
+  font-family:var(--mono);font-size:14px;font-weight:600;text-align:right;
+  font-variant-numeric:tabular-nums;color:var(--ink);
+}
+.srow.lo .spct{color:var(--bad)}
+.srow.hi .spct{color:var(--ok)}
+.stats .foot{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  margin-top:14px;padding-top:12px;border-top:1px solid var(--line);
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.03em;color:var(--faint);
+}
+.stats .foot button{
+  font:inherit;color:var(--faint);background:none;border:0;padding:2px 4px;
+  cursor:pointer;text-decoration:underline;text-underline-offset:3px;flex:none;
+}
+.stats .foot button:hover{color:var(--bad)}
+@media (prefers-reduced-motion:reduce){ .sbar i{transition:none} }
+
 footer{
   margin-top:40px;padding-top:18px;border-top:1px solid var(--line);
   font-family:var(--mono);font-size:11.5px;line-height:1.7;color:var(--faint);letter-spacing:.02em;
@@ -298,6 +336,17 @@ footer{
           <div class="n"><span id="score-n">0</span><span class="d">/7</span></div>
           <div class="msg" id="score-msg"></div>
           <div class="hint" id="score-hint"></div>
+        </div>
+      </div>
+      <div class="panel" id="stats-panel" hidden>
+        <h2 id="stats-title"></h2>
+        <div class="stats">
+          <div class="tally" id="stats-tally"></div>
+          <div class="rows" id="stats-rows"></div>
+          <div class="foot">
+            <span id="stats-note"></span>
+            <button type="button" id="stats-reset"></button>
+          </div>
         </div>
       </div>
       <div class="acts">
@@ -802,10 +851,10 @@ const SOUNDS = [
     name: ["Cinguettio di un uccello", "A bird chirping"],
     blurb: ["Un cardinale rosso (Cardinalis cardinalis). Ogni fischio è una modulazione di frequenza rapidissima fra 1 e 6 kHz: tratti curvi e sottili, in alto nell'immagine, e in fondo un trillo velocissimo.",
             "A Northern cardinal (Cardinalis cardinalis). Each whistle is a very fast frequency modulation between 1 and 6 kHz: thin curved strokes high up in the image, ending in a very fast trill."] },
-  { id: "gw", dr: 30, synth: synthGW, src: "sounds/gw170817-h1.ogg", fit: "end",
+  { id: "gw", dr: 52, synth: synthGW,
     name: ["Fusione di due stelle di neutroni (GW170817)", "Neutron star merger (GW170817)"],
-    blurb: ["Due stelle di neutroni a 130 milioni di anni luce, osservate il 17 agosto 2017. Questa è la deformazione vera misurata da LIGO-Hanford: sbiancata con la densità spettrale di Hanford, filtrata fra 30 e 400 Hz, accelerata 4 volte. Il chirp non si vede — e non è un errore. Il rapporto segnale-rumore di GW170817 si accumula su un centinaio di secondi di filtro adattato, quindi in ogni singolo pixel tempo-frequenza il segnale sta sotto il rumore. Per farlo emergere serve una trasformata Q.",
-            "Two neutron stars 130 million light years away, observed on 17 August 2017. This is the real strain measured by LIGO-Hanford: whitened by the Hanford spectral density, band-passed to 30-400 Hz, sped up 4x. The chirp is not visible — and that is not a mistake. GW170817's signal-to-noise ratio accumulates over some hundred seconds of matched filtering, so in any single time-frequency pixel the signal sits below the noise. Revealing it takes a Q-transform."] },
+    blurb: ["Due stelle di neutroni a 130 milioni di anni luce. Mentre spiraleggiano l'una verso l'altra la frequenza sale come f ∝ (t_c − t)^(−3/8): è il chirp. Massa di chirp ≈ 1,188 M☉. Qui il segnale è accelerato e traslato verso l'alto per renderlo udibile; le righe orizzontali sottili sono rumore strumentale.",
+            "Two neutron stars 130 million light years away. As they spiral together the frequency climbs as f ∝ (t_c − t)^(−3/8) — the chirp. Chirp mass ≈ 1.188 M☉. The signal is sped up and shifted upward here to make it audible; the thin horizontal lines are instrumental noise."] },
   { id: "orchestra", dr: 56, synth: synthOrchestra, src: "sounds/orchestra-beethoven5.ogg", fit: "start",
     name: ["Un'orchestra", "An orchestra"],
     blurb: ["L'inizio della Quinta Sinfonia di Beethoven. Ogni nota è una fondamentale più i suoi armonici: righe orizzontali equispaziate, interrotte dalle pause del motivo.",
@@ -844,14 +893,17 @@ const T = {
     ["Buon inizio. Riguarda le righe verticali e quelle orizzontali.", "A good start. Look again at the vertical lines, and the horizontal ones."],
     ["Nessun problema: è la prima volta che il suono lo vedi invece di sentirlo.", "No matter — this is the first time you have seen sound instead of hearing it."]
   ],
+  statsTitle: ["Come è andata al pubblico", "How visitors have done"],
+  statsHardest: ["Il più ingannevole", "The most deceiving"],
+  statsNote: ["Statistiche di questa postazione", "Statistics for this machine"],
+  statsReset: ["azzera", "reset"],
+  statsConfirm: ["Azzerare le statistiche del pubblico?", "Reset the visitor statistics?"],
   colophon1: ["Spettrogrammi calcolati nel browser a partire dall'audio che ascolti: FFT a 1024 punti, finestra di Hann, sovrapposizione del 75%, asse delle frequenze in scala Mel, mappa di colore CMRmap — la stessa catena di elaborazione di Friture.",
               "Spectrograms computed in the browser from the very audio you hear: 1024-point FFT, Hann window, 75% overlap, Mel frequency axis, CMRmap colour table — the same processing chain as Friture."],
-  colophon2: ["Battito di mani e fischio sono sintetizzati. Cinguettio, pioggia, starnuto e l'inizio della Quinta di Beethoven sono registrazioni vere (Xeno-canto e Wikimedia Commons). GW170817 è la deformazione vera misurata da LIGO-Hanford (GWOSC, CC BY 4.0), sbiancata, filtrata in banda e accelerata tre volte.",
-              "The hand clap and the whistle are synthesized. The bird, the rain, the sneeze and the opening of Beethoven's Fifth are real recordings (Xeno-canto and Wikimedia Commons). GW170817 is the real strain measured by LIGO-Hanford (GWOSC, CC BY 4.0), whitened, band-passed and sped up three times."],
-  colophon3: ["Questa ricerca ha utilizzato dati ottenuti dal Gravitational Wave Open Science Center (gwosc.org), un servizio della LIGO Scientific Collaboration, della Virgo Collaboration e di KAGRA.",
-              "This research has made use of data obtained from the Gravitational Wave Open Science Center (gwosc.org), a service of the LIGO Scientific Collaboration, the Virgo Collaboration, and KAGRA."],
-  srcfail: ["Le registrazioni non si sono caricate, quindi cinguettio, pioggia, GW170817, orchestra e starnuto sono qui sintetizzati. Aprendo il file direttamente dal disco il browser blocca la lettura della cartella sounds/: usa il file offline, oppure servi la pagina con  python3 -m http.server.",
-            "The recordings did not load, so the bird, the rain, GW170817, the orchestra and the sneeze are synthesized here. Opening the file straight from disk makes the browser block reads from sounds/: use the offline build, or serve the page with  python3 -m http.server."]
+  colophon2: ["Battito di mani e fischio sono sintetizzati, e così anche GW170817: un modello d'onda costruito sui parametri veri dell'evento, non la misura. Cinguettio, pioggia, starnuto e l'inizio della Quinta di Beethoven sono registrazioni vere (Xeno-canto e Wikimedia Commons).",
+              "The hand clap and the whistle are synthesized, and so is GW170817: a model waveform built from the event's real parameters, not the measurement. The bird, the rain, the sneeze and the opening of Beethoven's Fifth are real recordings (Xeno-canto and Wikimedia Commons)."],
+  srcfail: ["Le registrazioni non si sono caricate, quindi cinguettio, pioggia, orchestra e starnuto sono qui sintetizzati. Aprendo il file direttamente dal disco il browser blocca la lettura della cartella sounds/: usa il file offline, oppure servi la pagina con  python3 -m http.server.",
+            "The recordings did not load, so the bird, the rain, the orchestra and the sneeze are synthesized here. Opening the file straight from disk makes the browser block reads from sounds/: use the offline build, or serve the page with  python3 -m http.server."]
 };
 
 /* =========================================================================
@@ -943,7 +995,9 @@ const els = {
   scorePanel: $("score-panel"), scoreTitle: $("score-title"), scoreN: $("score-n"),
   scoreMsg: $("score-msg"), scoreHint: $("score-hint"),
   submit: $("submit"), revealall: $("revealall"), again: $("again"), progress: $("progress"),
-  tagline: $("tagline"), howto: $("howto"), colophon: $("colophon")
+  tagline: $("tagline"), howto: $("howto"), colophon: $("colophon"),
+  statsPanel: $("stats-panel"), statsTitle: $("stats-title"), statsTally: $("stats-tally"),
+  statsRows: $("stats-rows"), statsNote: $("stats-note"), statsReset: $("stats-reset")
 };
 
 function shuffle(a){
@@ -1030,11 +1084,64 @@ function reveal(i){
   state.revealed[i] = true;
   renderGame();
 }
+/* ---------- visitor statistics ----------
+   Accumulated across rounds and kept in localStorage, so a day of an event
+   survives reloads. Storage can be unavailable (private windows, a browser
+   with site data blocked), so every access is guarded and falls back to an
+   in-memory tally that lasts as long as the tab does. */
+
+const STATS_KEY = "che-suono-e/stats/v1";
+let statsCache = null;
+
+function blankStats(){
+  const per = {};
+  for (const s of SOUNDS) per[s.id] = { shown: 0, right: 0 };
+  return { rounds: 0, per: per };
+}
+function loadStats(){
+  if (statsCache) return statsCache;
+  const st = blankStats();
+  let saved = null;
+  try { const raw = localStorage.getItem(STATS_KEY); if (raw) saved = JSON.parse(raw); } catch (err) {}
+  if (saved && saved.per){
+    st.rounds = saved.rounds | 0;
+    for (const s of SOUNDS){
+      const p = saved.per[s.id];
+      if (p){ st.per[s.id].shown = p.shown | 0; st.per[s.id].right = p.right | 0; }
+    }
+  }
+  statsCache = st;
+  return st;
+}
+function saveStats(st){
+  statsCache = st;
+  try { localStorage.setItem(STATS_KEY, JSON.stringify(st)); } catch (err) {}
+}
+function recordRound(){
+  const st = loadStats();
+  st.rounds++;
+  for (let c = 0; c < 7; c++){
+    const truth = state.order[c];
+    const p = st.per[SOUNDS[truth].id];
+    p.shown++;
+    if (state.assign[c] === truth) p.right++;
+  }
+  saveStats(st);
+}
+function resetStats(){
+  if (!window.confirm(prim(T.statsConfirm))) return;
+  statsCache = null;
+  try { localStorage.removeItem(STATS_KEY); } catch (err) {}
+  statsCache = blankStats();
+  renderGame();
+}
+
 function submitAnswers(){
   if (state.assign.some((a) => a === null)) return;
   state.submitted = true;
   state.score = state.order.reduce((n, truth, i) => n + (state.assign[i] === truth ? 1 : 0), 0);
   state.selChip = null; state.selCard = null;
+  recordRound();
   renderGame();
 }
 function newRound(){
@@ -1058,10 +1165,11 @@ function renderStatic(){
   els.howto.innerHTML = bi(T.howto);
   els.poolTitle.innerHTML = bi(T.poolTitle, true);
   els.scoreTitle.innerHTML = bi(T.scoreTitle, true);
+  els.statsTitle.innerHTML = bi(T.statsTitle, true);
   els.submit.innerHTML = bi(T.submit, true);
   els.revealall.innerHTML = bi(T.revealAll, true);
   els.again.innerHTML = bi(T.again, true);
-  els.colophon.innerHTML = [T.colophon1, T.colophon2, T.colophon3].map((c, i) =>
+  els.colophon.innerHTML = [T.colophon1, T.colophon2].map((c, i) =>
     "<div" + (i ? " style='margin-top:.7em'" : "") + ">" + esc(prim(c)) + "</div><div>" + esc(sec(c)) + "</div>").join("");
 }
 
@@ -1133,6 +1241,8 @@ function renderGame(){
   els.revealall.hidden = !state.submitted || state.revealed.every(Boolean);
   els.again.hidden = !state.submitted;
 
+  renderStats();
+
   // score
   els.scorePanel.hidden = !state.submitted;
   if (state.submitted){
@@ -1141,6 +1251,47 @@ function renderGame(){
     els.scoreMsg.innerHTML = bi(T.scores[band]);
     els.scoreHint.innerHTML = state.revealed.every(Boolean) ? "" : bi(T.hint);
   }
+}
+
+/* The panel appears only once a round has been played, and only after the
+   visitor has submitted, so it never hints at an answer they are still on. */
+function renderStats(){
+  const st = loadStats();
+  els.statsPanel.hidden = !(state.submitted && st.rounds > 0);
+  if (els.statsPanel.hidden) return;
+
+  const avg = SOUNDS.reduce((n, s) => n + st.per[s.id].right, 0) / st.rounds;
+  els.statsTally.innerHTML = lang === "it"
+    ? "<b>" + st.rounds + "</b> " + (st.rounds === 1 ? "partita" : "partite") +
+      " \u00b7 media <b>" + avg.toFixed(1).replace(".", ",") + "</b> / 7"
+    : "<b>" + st.rounds + "</b> " + (st.rounds === 1 ? "round" : "rounds") +
+      " \u00b7 average <b>" + avg.toFixed(1) + "</b> / 7";
+
+  // hardest first: the interesting story is which image fools people
+  const rows = SOUNDS.map((s) => {
+    const p = st.per[s.id];
+    return { name: s.name, pct: p.shown ? p.right / p.shown : 0, shown: p.shown };
+  }).sort((a, b) => a.pct - b.pct);
+
+  // the hardest one gets called out by name: the best line an explainer has
+  const worst = rows[0];
+  if (st.rounds >= 3 && worst.shown > 0 && worst.pct < 0.7){
+    els.statsTally.innerHTML +=
+      '<div class="lead">' + esc(prim(T.statsHardest)) + ": <b>" + esc(prim(worst.name)) + "</b></div>";
+  }
+
+  els.statsRows.innerHTML = rows.map((r) => {
+    const pct = Math.round(r.pct * 100);
+    const cls = r.shown === 0 ? "" : pct >= 70 ? " hi" : pct < 40 ? " lo" : "";
+    return '<div class="srow' + cls + '">' +
+      '<div class="sname">' + esc(prim(r.name)) + '<span>' + esc(sec(r.name)) + '</span></div>' +
+      '<div class="sbar"><i style="width:' + pct + '%"></i></div>' +
+      '<div class="spct">' + pct + '%</div>' +
+    '</div>';
+  }).join("");
+
+  els.statsNote.textContent = prim(T.statsNote);
+  els.statsReset.textContent = prim(T.statsReset);
 }
 
 function setLang(l){ lang = l; renderStatic(); renderGame(); }
@@ -1227,6 +1378,7 @@ $("lang-it").addEventListener("click", () => setLang("it"));
 $("lang-en").addEventListener("click", () => setLang("en"));
 els.submit.addEventListener("click", submitAnswers);
 els.again.addEventListener("click", newRound);
+els.statsReset.addEventListener("click", resetStats);
 els.revealall.addEventListener("click", () => {
   for (let i = 0; i < 7; i++) state.revealed[i] = true;
   renderGame();

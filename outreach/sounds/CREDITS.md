@@ -1,11 +1,12 @@
 # Sound credits
 
-Five of the seven sounds in the game are real recordings. The hand clap and the
-whistle are synthesized by the page itself and have no source to credit.
+Four of the seven sounds in the game are real recordings. The hand clap, the
+whistle and GW170817 are synthesized by the page itself and have no source to
+credit.
 
-`gwosc/` holds four ready-made GWOSC sonifications that the game does **not**
-currently use; they are kept here as alternative material for the GW card and
-for an explainer to play from a laptop. See the last section.
+`gw170817-h1.ogg` and everything in `gwosc/` are **not used by the game**. They
+are kept here as alternative material for the GW card and for an explainer to
+play from a laptop. See the last two sections.
 
 ## bird-cardinal.ogg
 
@@ -55,7 +56,7 @@ the 4 s slot and normalises it at load time; the file itself is untouched.
 - Source: Wikimedia Commons, [File:Sneezing.ogg](https://commons.wikimedia.org/wiki/File:Sneezing.ogg)
 - Licence: **Public domain**
 
-## gw170817-h1.ogg
+## gw170817-h1.ogg — not used by the game
 
 The real gravitational wave event GW170817 — two neutron stars merging
 130 million light years away, observed on 17 August 2017.
@@ -93,8 +94,9 @@ as a textured noise band rather than a rising curve. This is physics, not a
 processing error — it is exactly why the ODW tutorial reaches for a Q-transform
 at Q≈100 to make the track appear.
 
-`synthGW()` in the page remains as a model waveform built from the event's real
-parameters, and is still used if this file cannot be loaded.
+This is why the game's card is `synthGW()` instead: a model waveform built from
+the event's real parameters, which does show the chirp. The page's colophon says
+plainly that it is a model and not the measurement.
 
 ## gwosc/ — sonifications, not used by the game
 
