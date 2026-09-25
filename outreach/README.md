@@ -10,17 +10,21 @@ borrows Friture's spectrogram pipeline for teaching purposes, and nothing in the
 
 ## Running it
 
-**At an event, use `che-suono-e.offline.html`.** It is a single self-contained
-file with the fonts and the recordings embedded, so it needs no network and no
-server. Copy it to a USB stick and it works anywhere.
+**`che-suono-e.html` is the whole game — just open it.** It is a single
+self-contained file with the fonts and the recordings embedded, so it needs no
+network, no server and nothing else from this folder. Copy that one file to a
+USB stick and it works anywhere. It is a build output, generated from the two
+files below.
 
-`che-suono-e.html` is the source, and it reads its recordings from `sounds/`.
-Browsers refuse to `fetch` from `sounds/` when a page is opened straight from
-disk as a `file://` URL, so opening it that way falls back to the synthesized
-sounds and shows a notice saying so. To work on it, serve it:
+`che-suono-e.src.html` is the source. It reads its recordings from `sounds/`,
+and browsers refuse to `fetch` from `sounds/` when a page is opened straight
+from disk as a `file://` URL, so **opening the source from disk falls back to
+the synthesized sounds** and shows a notice saying so. That is the one trap
+here: edit the source, but open the built file. To try the source as you work,
+serve it:
 
     cd outreach && python3 -m http.server
-    # then open http://localhost:8000/che-suono-e.html
+    # then open http://localhost:8000/che-suono-e.src.html
 
 ## The sounds
 
@@ -108,7 +112,7 @@ once before the doors open, since testing inflates the numbers.
 
 ## Rebuilding the offline file
 
-`che-suono-e.offline.html` is generated. After editing `che-suono-e.html` or
+`che-suono-e.html` is generated. After editing `che-suono-e.src.html` or
 changing anything in `sounds/`, run:
 
     python3 outreach/build-offline.py
@@ -124,7 +128,7 @@ the repository. The embedded and bundled third-party material is not:
 
 | What | Licence |
 |---|---|
-| IBM Plex, embedded in the offline build | SIL Open Font License 1.1 — see `IBM-Plex-OFL.txt` |
+| IBM Plex, embedded in the built file | SIL Open Font License 1.1 — see `IBM-Plex-OFL.txt` |
 | `sounds/bird-cardinal.ogg` | Creative Commons (Xeno-canto XC1151504) — **variant and recordist still to be recorded** |
 | `sounds/rain.ogg` | Public domain (Wikimedia Commons) |
 | `sounds/orchestra-beethoven5.ogg` | Public domain (Wikimedia Commons) |

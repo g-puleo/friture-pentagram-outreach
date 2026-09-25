@@ -1,0 +1,1397 @@
+<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><title>Che Suono È?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+</head><body>
+<style>
+:root{
+  --ground:#EDEEF3;
+  --panel:#FFFFFF;
+  --panel-2:#F4F5FA;
+  --ink:#141827;
+  --muted:#565C74;
+  --faint:#868CA4;
+  --line:#D7DAE5;
+  --line-strong:#C2C6D6;
+  --accent:#A65B12;
+  --accent-soft:rgba(166,91,18,.10);
+  --ok:#1C7A54;
+  --bad:#AD2239;
+  --ok-soft:rgba(28,122,84,.10);
+  --bad-soft:rgba(173,34,57,.09);
+  --shadow:0 1px 2px rgba(18,22,38,.05), 0 10px 28px rgba(18,22,38,.06);
+  --shadow-sm:0 1px 2px rgba(18,22,38,.06);
+  --sans:"IBM Plex Sans","Helvetica Neue",Arial,sans-serif;
+  --cond:"IBM Plex Sans Condensed","IBM Plex Sans","Helvetica Neue",Arial,sans-serif;
+  --mono:"IBM Plex Mono","SFMono-Regular",Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#0B0C14;
+    --panel:#14161F;
+    --panel-2:#1B1E29;
+    --ink:#E6E8F2;
+    --muted:#9096AD;
+    --faint:#6A7089;
+    --line:#272B39;
+    --line-strong:#393F52;
+    --accent:#F2A63B;
+    --accent-soft:rgba(242,166,59,.13);
+    --ok:#3FB27F;
+    --bad:#E05263;
+    --ok-soft:rgba(63,178,127,.13);
+    --bad-soft:rgba(224,82,99,.13);
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px rgba(0,0,0,.35);
+    --shadow-sm:0 1px 2px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0B0C14;
+  --panel:#14161F;
+  --panel-2:#1B1E29;
+  --ink:#E6E8F2;
+  --muted:#9096AD;
+  --faint:#6A7089;
+  --line:#272B39;
+  --line-strong:#393F52;
+  --accent:#F2A63B;
+  --accent-soft:rgba(242,166,59,.13);
+  --ok:#3FB27F;
+  --bad:#E05263;
+  --ok-soft:rgba(63,178,127,.13);
+  --bad-soft:rgba(224,82,99,.13);
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px rgba(0,0,0,.35);
+  --shadow-sm:0 1px 2px rgba(0,0,0,.4);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--ground);
+  color:var(--ink);
+  font-family:var(--sans);
+  font-size:17px;
+  line-height:1.45;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1360px;margin:0 auto;padding-inline:24px;padding-block:26px 56px}
+
+/* ---------- bilingual text ---------- */
+.bi{display:block}
+.bi .p{display:block}
+.bi .s{display:block;font-size:.8em;line-height:1.3;color:var(--faint);font-weight:400}
+.bi.row{display:flex;align-items:baseline;gap:.45em;flex-wrap:wrap}
+.bi.row .s{font-size:.82em}
+.bi.row .s::before{content:"·";margin-right:.45em;color:var(--line-strong)}
+
+/* ---------- header ---------- */
+header{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;flex-wrap:wrap;margin-bottom:22px}
+.brand{max-width:62ch}
+h1{
+  font-family:var(--cond);
+  font-weight:700;
+  font-size:clamp(34px,4.6vw,54px);
+  line-height:1.02;
+  letter-spacing:-.015em;
+  margin:0 0 2px;
+  text-wrap:balance;
+}
+h1 .en{display:block;font-size:.45em;font-weight:600;color:var(--faint);letter-spacing:.01em;margin-top:6px}
+.tagline{margin:12px 0 0;color:var(--muted);font-size:1.02rem;max-width:56ch}
+.tagline .s{color:var(--faint);font-size:.86em;font-style:italic}
+
+.langs{display:flex;gap:2px;padding:3px;background:var(--panel);border:1px solid var(--line);border-radius:999px;box-shadow:var(--shadow-sm);flex:0 0 auto}
+.langs button{
+  font-family:var(--mono);font-size:13px;font-weight:600;letter-spacing:.06em;
+  padding:7px 15px;border-radius:999px;border:0;background:transparent;color:var(--muted);cursor:pointer;
+}
+.langs button[aria-pressed="true"]{background:var(--ink);color:var(--ground)}
+
+.howto{
+  display:flex;gap:14px;align-items:flex-start;
+  margin:20px 0 26px;padding:14px 16px;
+  border:1px solid var(--line);border-left:3px solid var(--accent);
+  border-radius:0 8px 8px 0;background:var(--panel);
+}
+.howto .num{font-family:var(--mono);font-size:12px;color:var(--accent);font-weight:600;padding-top:2px}
+.howto .t{font-size:.95rem}
+.howto .t .s{color:var(--faint);font-style:italic}
+
+/* ---------- layout ---------- */
+.game{display:grid;grid-template-columns:minmax(0,1fr) 336px;gap:26px;align-items:start}
+.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+
+/* ---------- card ---------- */
+.card{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:10px;
+  overflow:hidden;
+  box-shadow:var(--shadow-sm);
+  transition:border-color .16s, box-shadow .16s, transform .16s;
+}
+.card.armed{cursor:pointer}
+.card.armed:hover{border-color:var(--line-strong)}
+.card.sel{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-soft),var(--shadow-sm)}
+.card.ok{border-color:var(--ok);box-shadow:0 0 0 3px var(--ok-soft)}
+.card.bad{border-color:var(--bad);box-shadow:0 0 0 3px var(--bad-soft)}
+.spec{position:relative;aspect-ratio:16/6.4;background:#05050b;overflow:hidden}
+.spec canvas{display:block;width:100%;height:100%}
+.spec .loading{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:#5b5f78;text-transform:uppercase;
+}
+.playhead{position:absolute;top:0;bottom:0;width:2px;background:rgba(255,255,255,.9);left:0;opacity:0;pointer-events:none;box-shadow:0 0 8px rgba(255,255,255,.5)}
+.playhead.on{opacity:1}
+.tag{
+  position:absolute;left:8px;top:8px;
+  font-family:var(--mono);font-weight:600;font-size:13px;
+  width:26px;height:26px;display:flex;align-items:center;justify-content:center;
+  background:rgba(8,8,16,.72);color:#EDEFF6;border:1px solid rgba(255,255,255,.18);border-radius:5px;
+}
+.verdict{
+  position:absolute;right:8px;top:8px;
+  font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;
+  padding:5px 9px;border-radius:5px;display:none;
+}
+.card.ok .verdict{display:block;background:var(--ok);color:#fff}
+.card.bad .verdict{display:block;background:var(--bad);color:#fff}
+.meta{
+  position:absolute;right:8px;bottom:6px;
+  font-family:var(--mono);font-size:10.5px;color:rgba(235,238,247,.5);letter-spacing:.03em;
+}
+.foot{display:flex;align-items:center;gap:10px;padding:10px}
+.play{
+  flex:0 0 auto;width:42px;height:42px;border-radius:8px;
+  border:1px solid var(--line-strong);background:var(--panel-2);color:var(--ink);
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:background .14s,border-color .14s;
+}
+.play:hover{background:var(--accent-soft);border-color:var(--accent)}
+.play svg{width:15px;height:15px;fill:currentColor}
+.play.playing{background:var(--accent);border-color:var(--accent);color:var(--ground)}
+.slot{
+  flex:1 1 auto;min-width:0;min-height:42px;
+  border:1px dashed var(--line-strong);border-radius:8px;
+  display:flex;align-items:center;padding:5px 11px;
+  font-size:.93rem;color:var(--faint);
+  background:transparent;text-align:left;font-family:inherit;cursor:pointer;
+}
+.slot .ph{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase}
+.slot.filled{border-style:solid;border-color:var(--line-strong);background:var(--panel-2);color:var(--ink);font-weight:500}
+.slot.filled .s{color:var(--faint);font-weight:400}
+.card.bad .truth{
+  padding:0 10px 10px;font-size:.85rem;color:var(--bad);
+}
+.card.bad .truth .lbl{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;opacity:.8;margin-right:.4em}
+.blurb{display:none;padding:0 10px 12px;font-size:.87rem;color:var(--muted);border-top:1px solid var(--line);margin:0 10px;padding-top:10px}
+.card.revealed .blurb{display:block}
+.blurb .s{display:block;margin-top:5px;color:var(--faint);font-style:italic}
+
+/* ---------- rail ---------- */
+.rail{position:sticky;top:calc(env(safe-area-inset-top, 0px) + 16px);display:flex;flex-direction:column;gap:14px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);overflow:hidden}
+.panel h2{
+  margin:0;padding:13px 15px;border-bottom:1px solid var(--line);
+  font-family:var(--mono);font-size:11.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);
+}
+.panel h2 .s{text-transform:none;letter-spacing:.06em;color:var(--faint);font-size:.9em}
+.pool{display:flex;flex-direction:column;gap:7px;padding:11px}
+.chip{
+  width:100%;text-align:left;font-family:inherit;font-size:.95rem;
+  padding:9px 12px;border-radius:8px;border:1px solid var(--line);
+  background:var(--panel-2);color:var(--ink);cursor:pointer;
+  transition:border-color .14s,box-shadow .14s,background .14s;
+}
+.chip:hover{border-color:var(--line-strong)}
+.chip.sel{border-color:var(--accent);background:var(--accent-soft);box-shadow:0 0 0 2px var(--accent-soft)}
+.chip .s{color:var(--faint);font-size:.8em}
+.pool .empty{font-family:var(--mono);font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--faint);padding:10px 2px;text-align:center}
+
+.btn{
+  width:100%;font-family:inherit;font-size:.97rem;font-weight:500;
+  padding:12px 14px;border-radius:8px;border:1px solid var(--line-strong);
+  background:var(--panel-2);color:var(--ink);cursor:pointer;
+  transition:background .14s,border-color .14s,opacity .14s;
+}
+.btn:hover:not(:disabled){border-color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--panel)}
+:root[data-theme="dark"] .btn.primary,
+:root:not([data-theme="light"]) .btn.primary{color:#171208}
+@media (prefers-color-scheme: light){:root:not([data-theme="dark"]) .btn.primary{color:#fff}}
+.btn.primary:hover:not(:disabled){filter:brightness(1.08)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.acts{display:flex;flex-direction:column;gap:9px;padding:11px}
+.progress{font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;color:var(--faint);text-align:center;padding-bottom:3px}
+
+.score{padding:18px 15px;text-align:center}
+.score .n{font-family:var(--mono);font-size:56px;font-weight:600;line-height:1;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.score .n .d{color:var(--faint);font-size:.44em;font-weight:400}
+.score .msg{margin-top:10px;font-size:.98rem}
+.score .msg .s{color:var(--faint);font-size:.84em;font-style:italic}
+.score .hint{margin-top:13px;padding-top:13px;border-top:1px solid var(--line);font-size:.85rem;color:var(--muted)}
+.score .hint .s{color:var(--faint);font-style:italic}
+
+/* visitor statistics, accumulated across rounds on this machine */
+.stats{padding:15px}
+.stats .tally{
+  font-family:var(--mono);font-size:12px;letter-spacing:.03em;color:var(--muted);
+  text-align:center;padding-bottom:13px;margin-bottom:13px;border-bottom:1px solid var(--line);
+  font-variant-numeric:tabular-nums;
+}
+.stats .tally b{color:var(--ink);font-weight:600;font-size:15px}
+.stats .tally .lead{
+  margin-top:7px;font-family:var(--sans);font-size:.82rem;letter-spacing:0;color:var(--accent);
+}
+.stats .tally .lead b{color:var(--accent);font-size:1em}
+.srow{display:grid;grid-template-columns:1fr 92px 46px;gap:10px;align-items:center;margin-bottom:9px}
+.srow:last-child{margin-bottom:0}
+.sname{font-size:.9rem;line-height:1.25;min-width:0}
+.sname span{display:block;color:var(--faint);font-size:.78em;font-style:italic}
+.sbar{height:9px;border-radius:5px;background:var(--panel-2);border:1px solid var(--line);overflow:hidden}
+.sbar i{display:block;height:100%;border-radius:4px;background:var(--accent);transition:width .5s ease}
+.srow.hi .sbar i{background:var(--ok)}
+.srow.lo .sbar i{background:var(--bad)}
+.spct{
+  font-family:var(--mono);font-size:14px;font-weight:600;text-align:right;
+  font-variant-numeric:tabular-nums;color:var(--ink);
+}
+.srow.lo .spct{color:var(--bad)}
+.srow.hi .spct{color:var(--ok)}
+.stats .foot{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  margin-top:14px;padding-top:12px;border-top:1px solid var(--line);
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.03em;color:var(--faint);
+}
+.stats .foot button{
+  font:inherit;color:var(--faint);background:none;border:0;padding:2px 4px;
+  cursor:pointer;text-decoration:underline;text-underline-offset:3px;flex:none;
+}
+.stats .foot button:hover{color:var(--bad)}
+@media (prefers-reduced-motion:reduce){ .sbar i{transition:none} }
+
+footer{
+  margin-top:40px;padding-top:18px;border-top:1px solid var(--line);
+  font-family:var(--mono);font-size:11.5px;line-height:1.7;color:var(--faint);letter-spacing:.02em;
+}
+
+.notice{
+  margin:0 0 20px;padding:12px 15px;border-radius:0 8px 8px 0;
+  border:1px solid var(--line);border-left:3px solid var(--bad);
+  background:var(--panel);font-size:.9rem;
+}
+.notice .s{color:var(--faint);font-style:italic}
+
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+@media (max-width:1040px){
+  .game{grid-template-columns:1fr}
+  .rail{position:static}
+  .pool{flex-direction:row;flex-wrap:wrap}
+  .chip{width:auto;flex:1 1 210px}
+  .acts{flex-direction:row;flex-wrap:wrap}
+  .acts .btn{flex:1 1 180px;width:auto}
+  .progress{width:100%}
+}
+@media (max-width:660px){
+  body{font-size:16px}
+  .wrap{padding-inline:16px}
+  .cards{grid-template-columns:1fr}
+  .chip{flex:1 1 100%}
+  .acts .btn{flex:1 1 100%}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition:none!important;animation:none!important}
+}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <h1>Che Suono È?<span class="en">What Sound Is It?</span></h1>
+      <p class="tagline" id="tagline"></p>
+    </div>
+    <div class="langs" role="group" aria-label="Lingua / Language">
+      <button id="lang-it" type="button" aria-pressed="true">IT</button>
+      <button id="lang-en" type="button" aria-pressed="false">EN</button>
+    </div>
+  </header>
+
+  <div class="howto">
+    <span class="num">01</span>
+    <div class="t" id="howto"></div>
+  </div>
+
+  <div class="game">
+    <div class="cards" id="cards"></div>
+
+    <div class="rail">
+      <div class="panel" id="pool-panel">
+        <h2 id="pool-title"></h2>
+        <div class="pool" id="pool"></div>
+      </div>
+      <div class="panel" id="score-panel" hidden>
+        <h2 id="score-title"></h2>
+        <div class="score">
+          <div class="n"><span id="score-n">0</span><span class="d">/7</span></div>
+          <div class="msg" id="score-msg"></div>
+          <div class="hint" id="score-hint"></div>
+        </div>
+      </div>
+      <div class="panel" id="stats-panel" hidden>
+        <h2 id="stats-title"></h2>
+        <div class="stats">
+          <div class="tally" id="stats-tally"></div>
+          <div class="rows" id="stats-rows"></div>
+          <div class="foot">
+            <span id="stats-note"></span>
+            <button type="button" id="stats-reset"></button>
+          </div>
+        </div>
+      </div>
+      <div class="acts">
+        <div class="progress" id="progress"></div>
+        <button class="btn primary" id="submit" type="button" disabled></button>
+        <button class="btn" id="revealall" type="button" hidden></button>
+        <button class="btn" id="again" type="button" hidden></button>
+      </div>
+    </div>
+  </div>
+
+  <footer id="colophon"></footer>
+</div>
+
+<script>
+"use strict";
+
+/* =========================================================================
+   DSP core — everything is plain arrays so the exact samples that are drawn
+   are the exact samples that get played.
+   ========================================================================= */
+
+const SR = 22050;          // Nyquist 11.025 kHz — above every sound here
+const DUR = 4.0;
+const NS = Math.round(SR * DUR);
+
+function mulberry32(a){
+  return function(){
+    a |= 0; a = (a + 0x6D2B79F5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+/* RBJ cookbook biquad */
+function biquad(type, f0, Q, sr, gainDb){
+  const w0 = 2 * Math.PI * Math.min(f0, sr * 0.49) / sr;
+  const c = Math.cos(w0), s = Math.sin(w0), alpha = s / (2 * Q);
+  let b0, b1, b2, a0, a1, a2;
+  if (type === 'lp'){ b0 = (1 - c) / 2; b1 = 1 - c; b2 = b0; a0 = 1 + alpha; a1 = -2 * c; a2 = 1 - alpha; }
+  else if (type === 'hp'){ b0 = (1 + c) / 2; b1 = -(1 + c); b2 = b0; a0 = 1 + alpha; a1 = -2 * c; a2 = 1 - alpha; }
+  else if (type === 'bp'){ b0 = alpha; b1 = 0; b2 = -alpha; a0 = 1 + alpha; a1 = -2 * c; a2 = 1 - alpha; }
+  else { const A = Math.pow(10, gainDb / 40);
+         b0 = 1 + alpha * A; b1 = -2 * c; b2 = 1 - alpha * A;
+         a0 = 1 + alpha / A; a1 = -2 * c; a2 = 1 - alpha / A; }
+  return [b0 / a0, b1 / a0, b2 / a0, a1 / a0, a2 / a0];
+}
+function filt(x, co){
+  const b0 = co[0], b1 = co[1], b2 = co[2], a1 = co[3], a2 = co[4];
+  let x1 = 0, x2 = 0, y1 = 0, y2 = 0;
+  const y = new Float32Array(x.length);
+  for (let i = 0; i < x.length; i++){
+    const xi = x[i];
+    const yi = b0 * xi + b1 * x1 + b2 * x2 - a1 * y1 - a2 * y2;
+    x2 = x1; x1 = xi; y2 = y1; y1 = yi; y[i] = yi;
+  }
+  return y;
+}
+/* state-variable filter with a per-sample cutoff, for swept resonances */
+function svf(x, fAt, q, mode, sr){
+  let low = 0, band = 0;
+  const y = new Float32Array(x.length), qq = 1 / q;
+  for (let i = 0; i < x.length; i++){
+    const f = 2 * Math.sin(Math.PI * Math.min(fAt(i / sr), sr * 0.22) / sr);
+    const high = x[i] - low - qq * band;
+    band += f * high; low += f * band;
+    y[i] = mode === 'lp' ? low : mode === 'hp' ? high : band;
+  }
+  return y;
+}
+
+function noise(n, rnd){ const a = new Float32Array(n); for (let i = 0; i < n; i++) a[i] = rnd() * 2 - 1; return a; }
+function mix(dst, src, at, g){
+  const s = Math.max(0, Math.round(at));
+  const n = Math.min(src.length, dst.length - s);
+  for (let i = 0; i < n; i++) dst[s + i] += src[i] * g;
+}
+function smoothstep(u){ u = Math.max(0, Math.min(1, u)); return u * u * (3 - 2 * u); }
+
+/* oscillator with an arbitrary instantaneous frequency */
+function tone(dur, sr, freqAt, ampAt, extra){
+  const n = Math.round(dur * sr), out = new Float32Array(n);
+  let ph = 0;
+  for (let i = 0; i < n; i++){
+    const t = i / sr, u = t / dur;
+    ph += 2 * Math.PI * freqAt(u, t) / sr;
+    out[i] = (extra ? extra(ph, u, t) : Math.sin(ph)) * ampAt(u, t);
+  }
+  return out;
+}
+
+function finish(buf, peak){
+  let m = 0;
+  for (let i = 0; i < buf.length; i++){ const a = Math.abs(buf[i]); if (a > m) m = a; }
+  const g = m > 0 ? (peak || 0.92) / m : 0;
+  const fade = Math.round(0.008 * SR);
+  for (let i = 0; i < buf.length; i++){
+    let w = 1;
+    if (i < fade) w = i / fade;
+    else if (i > buf.length - fade) w = (buf.length - i) / fade;
+    buf[i] *= g * w;
+  }
+  return buf;
+}
+
+/* =========================================================================
+   The seven sounds
+   ========================================================================= */
+
+function synthClap(){
+  const rnd = mulberry32(20170817);
+  const out = new Float32Array(NS);
+  const one = (bright) => {
+    const n = Math.round(0.07 * SR);
+    const b = noise(n, rnd);
+    for (let i = 0; i < n; i++){
+      const t = i / SR;
+      b[i] *= Math.exp(-t / 0.011) * (1 - Math.exp(-t / 0.0004));
+    }
+    const body = filt(b, biquad('bp', 1150 * bright, 0.7, SR));
+    const hi = filt(b, biquad('hp', 2500, 0.7, SR));
+    const o = new Float32Array(n);
+    for (let i = 0; i < n; i++) o[i] = body[i] + hi[i] * 0.55 + b[i] * 0.12;
+    return o;
+  };
+  // small room: a handful of decaying, softened reflections
+  const tailLen = Math.round(0.4 * SR);
+  const tailSrc = noise(tailLen, rnd);
+  for (let i = 0; i < tailLen; i++) tailSrc[i] *= Math.exp(-(i / SR) / 0.075);
+  const tail = filt(filt(tailSrc, biquad('bp', 1400, 0.5, SR)), biquad('lp', 4200, 0.7, SR));
+
+  [0.20, 0.92, 1.48, 2.52, 3.22].forEach((t, k) => {
+    const g = [1, 0.86, 0.95, 0.8, 0.9][k];
+    mix(out, one(0.9 + rnd() * 0.25), t * SR, g);
+    mix(out, tail, (t + 0.012) * SR, 0.13 * g);
+  });
+  return finish(out);
+}
+
+function synthRain(){
+  const rnd = mulberry32(48151623);
+  const out = new Float32Array(NS);
+  let hiss = noise(NS, rnd);
+  hiss = filt(hiss, biquad('hp', 750, 0.7, SR));
+  hiss = filt(hiss, biquad('hp', 750, 0.7, SR));
+  hiss = filt(hiss, biquad('lp', 7200, 0.7, SR));
+  const rumble = filt(noise(NS, rnd), biquad('lp', 260, 0.7, SR));
+  for (let i = 0; i < NS; i++){
+    const t = i / SR;
+    const drift = 1 + 0.16 * Math.sin(2 * Math.PI * 0.31 * t) + 0.1 * Math.sin(2 * Math.PI * 0.17 * t + 1.3);
+    out[i] = hiss[i] * 0.30 * drift + rumble[i] * 0.10;
+  }
+  // individual drops landing
+  const drop = (f) => {
+    const n = Math.round(0.012 * SR);
+    const b = noise(n, rnd);
+    for (let i = 0; i < n; i++) b[i] *= Math.exp(-(i / SR) / 0.0032);
+    return filt(b, biquad('bp', f, 3.5, SR));
+  };
+  for (let k = 0; k < 190; k++){
+    mix(out, drop(1400 + rnd() * 5200), rnd() * (DUR - 0.05) * SR, 0.10 + rnd() * 0.16);
+  }
+  return finish(out, 0.85);
+}
+
+function synthBird(){
+  const rnd = mulberry32(77712);
+  const out = new Float32Array(NS);
+  //  t0    dur   from   to     shape
+  const notes = [
+    [0.20, 0.105, 2600, 5300, 'g'], [0.345, 0.085, 5000, 2950, 'g'],
+    [0.49, 0.135, 2800, 5700, 'a'],
+    [1.30, 0.115, 3150, 5950, 'g'], [1.455, 0.080, 5500, 3350, 'g'],
+    [1.60, 0.125, 2700, 5400, 'a'],
+    [2.42, 0.140, 2500, 6100, 'a'], [2.60, 0.090, 4700, 3150, 'g'],
+    [3.22, 0.120, 3000, 5500, 'g'], [3.37, 0.095, 5200, 3600, 'a']
+  ];
+  for (const [t0, d, fa, fb, sh] of notes){
+    const seg = tone(d, SR,
+      (u) => fa + (fb - fa) * (sh === 'a' ? Math.sin(Math.PI * u) : Math.pow(u, 0.55)),
+      (u, t) => Math.pow(Math.sin(Math.PI * u), 0.55) * (0.86 + 0.14 * Math.sin(2 * Math.PI * 115 * t)),
+      (ph) => Math.sin(ph) + 0.22 * Math.sin(2 * ph) + 0.06 * Math.sin(3 * ph)
+    );
+    mix(out, seg, t0 * SR, 0.55 + rnd() * 0.2);
+  }
+  return finish(filt(out, biquad('hp', 900, 0.7, SR)));
+}
+
+function synthGW(){
+  // Newtonian inspiral:  f(t) = f0 (1 - t/tc)^(-3/8),  A ∝ f^(2/3)
+  const rnd = mulberry32(170817);
+  const out = new Float32Array(NS);
+  const t0 = 0.30, T = 3.35, f0 = 90, f1 = 1500;
+  const tc = T / (1 - Math.pow(f1 / f0, -8 / 3));
+  const n = Math.round(T * SR);
+  const chirp = new Float32Array(n + Math.round(0.08 * SR));
+  let ph = 0;
+  for (let i = 0; i < n; i++){
+    const t = i / SR;
+    const f = f0 * Math.pow(1 - t / tc, -3 / 8);
+    ph += 2 * Math.PI * f / SR;
+    const amp = Math.pow(f / f0, 2 / 3) * (1 - Math.exp(-t / 0.25));
+    chirp[i] = Math.sin(ph) * amp;
+  }
+  // ringdown of the remnant
+  const rd = Math.round(0.08 * SR), fEnd = f0 * Math.pow(1 - (n / SR) / tc, -3 / 8);
+  let ampEnd = Math.pow(fEnd / f0, 2 / 3);
+  for (let i = 0; i < rd; i++){
+    const t = i / SR;
+    ph += 2 * Math.PI * (fEnd * 1.25) / SR;
+    chirp[n + i] = Math.sin(ph) * ampEnd * Math.exp(-t / 0.012);
+  }
+  let peak = 0;
+  for (let i = 0; i < chirp.length; i++) peak = Math.max(peak, Math.abs(chirp[i]));
+  mix(out, chirp, t0 * SR, 0.55 / peak);
+
+  // detector noise: a seismic wall at low frequency over broadband hiss
+  const nz = filt(filt(noise(NS, rnd), biquad('lp', 4000, 0.7, SR)), biquad('hp', 70, 0.7, SR));
+  const wall = filt(noise(NS, rnd), biquad('lp', 160, 0.7, SR));
+  for (let i = 0; i < NS; i++) out[i] += nz[i] * 0.040 + wall[i] * 0.10;
+
+  // mains harmonics and a violin-mode line, as in real strain data
+  [[160, 0.014], [320, 0.010], [480, 0.006], [1350, 0.007]].forEach(([f, g]) => {
+    for (let i = 0; i < NS; i++) out[i] += g * Math.sin(2 * Math.PI * f * i / SR);
+  });
+  return finish(out, 0.9);
+}
+
+function synthOrchestra(){
+  const rnd = mulberry32(1791);
+  const out = new Float32Array(NS);
+  const chords = [
+    { t: 0.05, d: 2.25, notes: [220.00, 293.66, 349.23, 440.00, 587.33] },  // D minor
+    { t: 1.90, d: 2.05, notes: [233.08, 293.66, 349.23, 466.16, 587.33] }   // B flat major
+  ];
+  for (const ch of chords){
+    const n = Math.round(ch.d * SR);
+    const env = (t) => smoothstep(t / 0.5) * smoothstep((ch.d - t) / 0.6);
+    for (const f of ch.notes){
+      for (let k = 1; k <= 9; k++){
+        const amp = (1 / Math.pow(k, 1.6)) * (0.8 + 0.4 * rnd());
+        const det = 1 + (rnd() - 0.5) * 0.005;
+        const vph = rnd() * 6.283;
+        const seg = tone(ch.d, SR,
+          (u, t) => f * k * det * (1 + 0.0042 * Math.sin(2 * Math.PI * 5.4 * t + vph)),
+          (u, t) => env(t) * amp);
+        mix(out, seg, ch.t * SR, 0.085);
+      }
+    }
+    // bow noise
+    const bn = filt(noise(n, rnd), biquad('bp', 2600, 0.8, SR));
+    for (let i = 0; i < n; i++) bn[i] *= env(i / SR);
+    mix(out, bn, ch.t * SR, 0.028);
+  }
+  return finish(out, 0.88);
+}
+
+function synthSneeze(){
+  const rnd = mulberry32(90210);
+  const out = new Float32Array(NS);
+
+  const one = (t0, scale) => {
+    // 1 — the intake, a resonance sweeping upward
+    const dIn = 0.52 * scale;
+    const inN = Math.round(dIn * SR);
+    const inhale = svf(noise(inN, rnd), (t) => 320 + 1350 * Math.pow(t / dIn, 1.5), 3.4, 'bp', SR);
+    for (let i = 0; i < inN; i++) inhale[i] *= Math.pow(i / inN, 1.7) * 0.9;
+    mix(out, inhale, t0 * SR, 0.5 * scale);
+
+    // 2 — the burst
+    const bt = t0 + dIn + 0.16;
+    const bn = Math.round(0.55 * SR);
+    const raw = noise(bn, rnd);
+    for (let i = 0; i < bn; i++){
+      const t = i / SR;
+      raw[i] *= Math.exp(-t / 0.058) * (1 - Math.exp(-t / 0.0014));
+    }
+    let burst = filt(raw, biquad('lp', 6800, 0.7, SR));
+    burst = filt(burst, biquad('peak', 720, 1.0, SR, 10));
+    burst = filt(burst, biquad('peak', 1780, 1.2, SR, 8));
+    mix(out, burst, bt * SR, scale);
+
+    // the voiced "-choo"
+    const voiced = tone(0.3, SR, (u, t) => 158 * (1 - 0.25 * t),
+      (u, t) => Math.exp(-t / 0.07) * (1 - Math.exp(-t / 0.004)),
+      (ph) => { let v = 0; for (let k = 1; k <= 9; k++) v += Math.sin(k * ph) / k; return v; });
+    mix(out, filt(voiced, biquad('lp', 2600, 0.7, SR)), (bt + 0.02) * SR, 0.30 * scale);
+
+    // hiss tail
+    const tN = Math.round(0.45 * SR);
+    const tl = filt(noise(tN, rnd), biquad('hp', 3200, 0.7, SR));
+    for (let i = 0; i < tN; i++) tl[i] *= Math.exp(-(i / SR) / 0.16);
+    mix(out, tl, (bt + 0.01) * SR, 0.16 * scale);
+  };
+
+  one(0.30, 1.0);
+  one(2.30, 0.62);
+  return finish(out);
+}
+
+function synthWhistle(){
+  const rnd = mulberry32(31415);
+  const pts = [[0.12, 1050], [0.55, 1050], [0.76, 1400], [1.30, 1400], [1.52, 880],
+               [2.00, 880], [2.24, 1180], [2.86, 1180], [3.06, 1500], [3.64, 1500]];
+  const freqAt = (t) => {
+    if (t <= pts[0][0]) return pts[0][1];
+    for (let i = 0; i < pts.length - 1; i++){
+      const [ta, fa] = pts[i], [tb, fb] = pts[i + 1];
+      if (t >= ta && t <= tb) return fa + (fb - fa) * smoothstep((t - ta) / (tb - ta));
+    }
+    return pts[pts.length - 1][1];
+  };
+  const body = tone(DUR, SR,
+    (u, t) => freqAt(t) * (1 + 0.005 * Math.sin(2 * Math.PI * 5.2 * t)),
+    (u, t) => smoothstep(t / 0.14) * smoothstep((DUR - t) / 0.30) * 0.9,
+    (ph) => Math.sin(ph) + 0.013 * Math.sin(2 * ph) + 0.005 * Math.sin(3 * ph));
+  const breath = svf(noise(NS, rnd), (t) => freqAt(t), 1.3, 'bp', SR);
+  const out = new Float32Array(NS);
+  for (let i = 0; i < NS; i++){
+    const t = i / SR;
+    out[i] = body[i] + breath[i] * 0.018 * smoothstep(t / 0.14) * smoothstep((DUR - t) / 0.30);
+  }
+  return finish(out);
+}
+</script>
+
+<script>
+"use strict";
+
+/* =========================================================================
+   Spectrogram — the same chain Friture uses on its live display:
+   Hann window, 1024-point FFT, 75% overlap, power in dB, Mel frequency
+   axis, CMRmap colour table.
+   ========================================================================= */
+
+const FFT_SIZE = 1024;
+const HOP = 256;
+const MIN_F = 20;
+const MAX_F = SR / 2;
+const ROWS = 256;
+
+const mel = (f) => 2595 * Math.log10(1 + f / 700);
+const melInv = (m) => 700 * (Math.pow(10, m / 2595) - 1);
+
+/* CMRmap: black → indigo → magenta → red → amber → white, with monotonic
+   luminance, so it still reads correctly projected or photographed.
+   Anchors from Friture's plotting/cmrmap_generate.py */
+const CMRREF = [[0,0,0],[0.10,0.10,0.35],[0.30,0.15,0.65],[0.60,0.20,0.50],
+                [1,0.25,0.15],[0.90,0.55,0],[0.90,0.75,0.10],[0.90,0.90,0.50],[1,1,1]];
+const CMAP = (() => {
+  const n = 256, lut = new Uint8ClampedArray(n * 3), m = CMRREF.length;
+  for (let i = 0; i < n; i++){
+    const x = i / (n - 1) * (m - 1);
+    const k = Math.min(Math.floor(x), m - 2), u = x - k;
+    for (let c = 0; c < 3; c++){
+      const p0 = CMRREF[Math.max(k - 1, 0)][c], p1 = CMRREF[k][c],
+            p2 = CMRREF[k + 1][c], p3 = CMRREF[Math.min(k + 2, m - 1)][c];
+      const v = 0.5 * (2 * p1 + (-p0 + p2) * u + (2 * p0 - 5 * p1 + 4 * p2 - p3) * u * u
+                       + (-p0 + 3 * p1 - 3 * p2 + p3) * u * u * u);
+      lut[i * 3 + c] = Math.max(0, Math.min(1, v)) * 255;
+    }
+  }
+  return lut;
+})();
+
+function makeFFT(n){
+  const levels = Math.round(Math.log2(n));
+  const cs = new Float64Array(n / 2), sn = new Float64Array(n / 2);
+  for (let i = 0; i < n / 2; i++){ cs[i] = Math.cos(2 * Math.PI * i / n); sn[i] = Math.sin(2 * Math.PI * i / n); }
+  const rev = new Uint32Array(n);
+  for (let i = 0; i < n; i++){ let x = i, r = 0; for (let j = 0; j < levels; j++){ r = (r << 1) | (x & 1); x >>= 1; } rev[i] = r; }
+  return function(re, im){
+    for (let i = 0; i < n; i++){
+      const j = rev[i];
+      if (j > i){ let t = re[i]; re[i] = re[j]; re[j] = t; t = im[i]; im[i] = im[j]; im[j] = t; }
+    }
+    for (let size = 2; size <= n; size *= 2){
+      const half = size / 2, step = n / size;
+      for (let i = 0; i < n; i += size){
+        for (let j = i, k = 0; j < i + half; j++, k += step){
+          const l = j + half;
+          const tre = re[l] * cs[k] + im[l] * sn[k];
+          const tim = -re[l] * sn[k] + im[l] * cs[k];
+          re[l] = re[j] - tre; im[l] = im[j] - tim;
+          re[j] += tre; im[j] += tim;
+        }
+      }
+    }
+  };
+}
+
+const HANN = (() => {
+  const w = new Float32Array(FFT_SIZE);
+  for (let i = 0; i < FFT_SIZE; i++) w[i] = 0.5 * (1 - Math.cos(2 * Math.PI * i / (FFT_SIZE - 1)));
+  return w;
+})();
+
+/* Mel row → interpolation weights over FFT bins (Friture's Frequency_Resampler) */
+const MELMAP = (() => {
+  const m0 = mel(MIN_F), m1 = mel(MAX_F);
+  const lo = new Int32Array(ROWS), frac = new Float32Array(ROWS);
+  for (let r = 0; r < ROWS; r++){
+    const f = melInv(m0 + (m1 - m0) * r / (ROWS - 1));
+    const b = Math.min(f * FFT_SIZE / SR, FFT_SIZE / 2 - 1.001);
+    lo[r] = Math.floor(b); frac[r] = b - Math.floor(b);
+  }
+  return { lo, frac };
+})();
+
+const runFFT = makeFFT(FFT_SIZE);
+
+function spectrogram(buf, dynRange){
+  const cols = Math.floor((buf.length - FFT_SIZE) / HOP) + 1;
+  const bins = FFT_SIZE / 2 + 1;
+  const db = new Float32Array(bins * cols);
+  const re = new Float64Array(FFT_SIZE), im = new Float64Array(FFT_SIZE);
+  let peak = -Infinity;
+
+  for (let c = 0; c < cols; c++){
+    const off = c * HOP;
+    for (let i = 0; i < FFT_SIZE; i++){ re[i] = buf[off + i] * HANN[i]; im[i] = 0; }
+    runFFT(re, im);
+    for (let k = 0; k < bins; k++){
+      const p = (re[k] * re[k] + im[k] * im[k]) / (FFT_SIZE * FFT_SIZE);
+      const d = 10 * Math.log10(p + 1e-30);
+      db[c * bins + k] = d;
+      if (d > peak) peak = d;
+    }
+  }
+
+  const specMax = peak, specMin = peak - dynRange, span = specMax - specMin;
+  const img = new ImageData(cols, ROWS);
+  const px = img.data;
+  const { lo, frac } = MELMAP;
+
+  for (let c = 0; c < cols; c++){
+    const base = c * bins;
+    for (let r = 0; r < ROWS; r++){
+      const k = lo[r], t = frac[r];
+      const v = db[base + k] * (1 - t) + db[base + k + 1] * t;
+      let u = (v - specMin) / span;
+      u = u < 0 ? 0 : u > 1 ? 1 : u;
+      const ci = (u * 255) | 0;
+      const o = ((ROWS - 1 - r) * cols + c) * 4;   // high frequencies on top
+      px[o]     = CMAP[ci * 3];
+      px[o + 1] = CMAP[ci * 3 + 1];
+      px[o + 2] = CMAP[ci * 3 + 2];
+      px[o + 3] = 255;
+    }
+  }
+  const off = document.createElement('canvas');
+  off.width = cols; off.height = ROWS;
+  off.getContext('2d').putImageData(img, 0, 0);
+  return off;
+}
+
+/* draw a rendered spectrogram into a card canvas, with its frequency grid */
+const TICKS = [[100, '100'], [500, '500'], [2000, '2k'], [8000, '8k']];
+function paintCard(canvas, source){
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const w = canvas.clientWidth, h = canvas.clientHeight;
+  if (!w || !h) return;
+  canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr);
+  const g = canvas.getContext('2d');
+  g.setTransform(dpr, 0, 0, dpr, 0, 0);
+  g.imageSmoothingEnabled = true;
+  g.imageSmoothingQuality = 'high';
+  g.drawImage(source, 0, 0, w, h);
+
+  const m0 = mel(MIN_F), m1 = mel(MAX_F);
+  g.font = '500 9.5px "IBM Plex Mono", monospace';
+  g.textBaseline = 'middle';
+  for (const [f, label] of TICKS){
+    const y = Math.round((1 - (mel(f) - m0) / (m1 - m0)) * h) + 0.5;
+    g.strokeStyle = 'rgba(255,255,255,.13)';
+    g.lineWidth = 1;
+    g.beginPath(); g.moveTo(0, y); g.lineTo(w - 26, y); g.stroke();
+    g.fillStyle = 'rgba(255,255,255,.42)';
+    g.fillText(label, w - 22, y);
+  }
+}
+</script>
+
+<script>
+"use strict";
+
+/* =========================================================================
+   Content — every string carries both languages
+   ========================================================================= */
+
+const SOUNDS = [
+  { id: "clap", dr: 72, synth: synthClap,
+    name: ["Battito di mani", "A hand clap"],
+    blurb: ["Un impulso brevissimo contiene tutte le frequenze insieme: per questo appare come una riga verticale che attraversa l'immagine da cima a fondo.",
+            "A very short impulse contains every frequency at once — which is why it appears as a vertical stripe crossing the image from top to bottom."] },
+  { id: "rain", dr: 48, synth: synthRain, src: "sounds/rain.ogg", fit: "start",
+    name: ["Pioggia", "Rain"],
+    blurb: ["Una registrazione vera di pioggia. Migliaia di gocce scorrelate producono un rumore quasi bianco: una nebbia uniforme, senza alcuna struttura.",
+            "A real recording of rain. Thousands of uncorrelated drops make near-white noise: an even fog with no structure at all."] },
+  { id: "bird", dr: 54, synth: synthBird, src: "sounds/bird-cardinal.ogg", fit: "start",
+    name: ["Cinguettio di un uccello", "A bird chirping"],
+    blurb: ["Un cardinale rosso (Cardinalis cardinalis). Ogni fischio è una modulazione di frequenza rapidissima fra 1 e 6 kHz: tratti curvi e sottili, in alto nell'immagine, e in fondo un trillo velocissimo.",
+            "A Northern cardinal (Cardinalis cardinalis). Each whistle is a very fast frequency modulation between 1 and 6 kHz: thin curved strokes high up in the image, ending in a very fast trill."] },
+  { id: "gw", dr: 52, synth: synthGW,
+    name: ["Fusione di due stelle di neutroni (GW170817)", "Neutron star merger (GW170817)"],
+    blurb: ["Due stelle di neutroni a 130 milioni di anni luce. Mentre spiraleggiano l'una verso l'altra la frequenza sale come f ∝ (t_c − t)^(−3/8): è il chirp. Massa di chirp ≈ 1,188 M☉. Qui il segnale è accelerato e traslato verso l'alto per renderlo udibile; le righe orizzontali sottili sono rumore strumentale.",
+            "Two neutron stars 130 million light years away. As they spiral together the frequency climbs as f ∝ (t_c − t)^(−3/8) — the chirp. Chirp mass ≈ 1.188 M☉. The signal is sped up and shifted upward here to make it audible; the thin horizontal lines are instrumental noise."] },
+  { id: "orchestra", dr: 56, synth: synthOrchestra, src: "sounds/orchestra-beethoven5.ogg", fit: "start",
+    name: ["Un'orchestra", "An orchestra"],
+    blurb: ["L'inizio della Quinta Sinfonia di Beethoven. Ogni nota è una fondamentale più i suoi armonici: righe orizzontali equispaziate, interrotte dalle pause del motivo.",
+            "The opening of Beethoven's Fifth Symphony. Each note is a fundamental plus its harmonics: evenly spaced horizontal lines, broken by the rests in the motif."] },
+  { id: "sneeze", dr: 78, synth: synthSneeze, src: "sounds/sneeze.ogg", fit: "peak",
+    name: ["Uno starnuto", "A sneeze"],
+    blurb: ["Una registrazione vera di due starnuti. Prima l'inspirazione, che sale di frequenza; poi l'esplosione, larga in frequenza e modellata dalle formanti del tratto vocale.",
+            "A real recording of two sneezes. First the intake of breath, sweeping upward; then the burst, broad in frequency and shaped by the formants of the vocal tract."] },
+  { id: "whistle", dr: 74, synth: synthWhistle,
+    name: ["Un fischio", "A whistle"],
+    blurb: ["Quasi una sinusoide pura: quasi nessun armonico, una sola riga sottile e brillante che scivola da una nota all'altra.",
+            "Almost a pure sine wave: hardly any harmonics, just one thin bright line sliding from note to note."] }
+];
+
+const T = {
+  tagline: ["Sette spettrogrammi. Sette suoni. Abbina ogni immagine al suono che l'ha prodotta.",
+            "Seven spectrograms. Seven sounds. Match each image to the sound that made it."],
+  howto: ["Tocca un nome nell'elenco, poi tocca lo spettrogramma a cui pensi appartenga. Premi ▶ per ascoltare quando vuoi. Abbinati tutti e sette, conferma.",
+          "Tap a name in the list, then tap the spectrogram you think it belongs to. Press ▶ to listen whenever you like. Once all seven are matched, submit."],
+  poolTitle: ["I suoni", "The sounds"],
+  poolEmpty: ["Tutti assegnati", "All assigned"],
+  slotEmpty: ["Assegna un suono", "Assign a sound"],
+  submit: ["Conferma", "Submit"],
+  revealAll: ["Scopri tutto", "Reveal all"],
+  again: ["Gioca ancora", "Play again"],
+  scoreTitle: ["Risultato", "Your score"],
+  correct: ["Giusto", "Correct"],
+  wrong: ["Sbagliato", "Wrong"],
+  truth: ["Era", "It was"],
+  hint: ["Premi ▶ su ogni spettrogramma per sentire il suono e scoprire se avevi ragione.",
+         "Press ▶ on each spectrogram to hear the sound and find out whether you were right."],
+  computing: ["calcolo…", "computing…"],
+  scores: [
+    ["Sette su sette. Sai leggere uno spettrogramma.", "Seven out of seven. You can read a spectrogram."],
+    ["Quasi tutti. L'occhio ce l'hai.", "Nearly all of them. You have the eye."],
+    ["Buon inizio. Riguarda le righe verticali e quelle orizzontali.", "A good start. Look again at the vertical lines, and the horizontal ones."],
+    ["Nessun problema: è la prima volta che il suono lo vedi invece di sentirlo.", "No matter — this is the first time you have seen sound instead of hearing it."]
+  ],
+  statsTitle: ["Come è andata al pubblico", "How visitors have done"],
+  statsHardest: ["Il più ingannevole", "The most deceiving"],
+  statsNote: ["Statistiche di questa postazione", "Statistics for this machine"],
+  statsReset: ["azzera", "reset"],
+  statsConfirm: ["Azzerare le statistiche del pubblico?", "Reset the visitor statistics?"],
+  colophon1: ["Spettrogrammi calcolati nel browser a partire dall'audio che ascolti: FFT a 1024 punti, finestra di Hann, sovrapposizione del 75%, asse delle frequenze in scala Mel, mappa di colore CMRmap — la stessa catena di elaborazione di Friture.",
+              "Spectrograms computed in the browser from the very audio you hear: 1024-point FFT, Hann window, 75% overlap, Mel frequency axis, CMRmap colour table — the same processing chain as Friture."],
+  colophon2: ["Battito di mani e fischio sono sintetizzati, e così anche GW170817: un modello d'onda costruito sui parametri veri dell'evento, non la misura. Cinguettio, pioggia, starnuto e l'inizio della Quinta di Beethoven sono registrazioni vere (Xeno-canto e Wikimedia Commons).",
+              "The hand clap and the whistle are synthesized, and so is GW170817: a model waveform built from the event's real parameters, not the measurement. The bird, the rain, the sneeze and the opening of Beethoven's Fifth are real recordings (Xeno-canto and Wikimedia Commons)."],
+  srcfail: ["Le registrazioni non si sono caricate, quindi cinguettio, pioggia, orchestra e starnuto sono qui sintetizzati. Aprendo il file direttamente dal disco il browser blocca la lettura della cartella sounds/: apri che-suono-e.html, oppure servi questa pagina con  python3 -m http.server.",
+            "The recordings did not load, so the bird, the rain, the orchestra and the sneeze are synthesized here. Opening the file straight from disk makes the browser block reads from sounds/: open che-suono-e.html instead, or serve this page with  python3 -m http.server."]
+};
+
+/* =========================================================================
+   Bilingual rendering
+   ========================================================================= */
+
+let lang = "it";
+const esc = (s) => String(s).replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
+const prim = (pair) => lang === "it" ? pair[0] : pair[1];
+const sec  = (pair) => lang === "it" ? pair[1] : pair[0];
+const bi = (pair, row) =>
+  '<span class="bi' + (row ? ' row' : '') + '"><span class="p">' + esc(prim(pair)) +
+  '</span><span class="s">' + esc(sec(pair)) + '</span></span>';
+
+/* =========================================================================
+   Audio
+   ========================================================================= */
+
+const bufCache = {}, specCache = {}, abCache = {};
+let actx = null, curSrc = null, curCard = -1, rafId = 0;
+
+function ensureCtx(){
+  if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
+  if (actx.state === "suspended") actx.resume();
+  return actx;
+}
+function stopAudio(){
+  if (curSrc){ try { curSrc.onended = null; curSrc.stop(); } catch (e) {} curSrc = null; }
+  cancelAnimationFrame(rafId);
+  if (curCard >= 0 && cardEls[curCard]){
+    cardEls[curCard].querySelector(".playhead").classList.remove("on");
+    cardEls[curCard].querySelector(".play").classList.remove("playing");
+  }
+  curCard = -1;
+}
+function playCard(i){
+  const s = SOUNDS[state.order[i]];
+  const data = bufCache[s.id];
+  if (!data) return;
+  const ctx = ensureCtx();
+  stopAudio();
+  if (!abCache[s.id]){
+    const ab = ctx.createBuffer(1, data.length, SR);
+    ab.copyToChannel(data, 0);
+    abCache[s.id] = ab;
+  }
+  const src = ctx.createBufferSource();
+  src.buffer = abCache[s.id];
+  const gain = ctx.createGain();
+  gain.gain.value = 0.85;
+  src.connect(gain).connect(ctx.destination);
+  const t0 = ctx.currentTime;
+  src.start();
+  curSrc = src; curCard = i;
+
+  const el = cardEls[i];
+  const head = el.querySelector(".playhead");
+  const btn = el.querySelector(".play");
+  head.classList.add("on");
+  btn.classList.add("playing");
+  const spec = el.querySelector(".spec");
+  const step = () => {
+    const u = (ctx.currentTime - t0) / DUR;
+    head.style.transform = "translateX(" + (Math.min(u, 1) * spec.clientWidth) + "px)";
+    if (u < 1) rafId = requestAnimationFrame(step);
+  };
+  rafId = requestAnimationFrame(step);
+  src.onended = () => { if (curCard === i) stopAudio(); };
+
+  if (state.submitted) reveal(i);
+}
+</script>
+
+<script>
+"use strict";
+
+/* =========================================================================
+   Game
+   ========================================================================= */
+
+const LETTERS = ["A", "B", "C", "D", "E", "F", "G"];
+const cardEls = [];
+const state = { order: [], pool: [], assign: [], selChip: null, selCard: null,
+                submitted: false, revealed: [], score: 0 };
+
+const $ = (id) => document.getElementById(id);
+const els = {
+  cards: $("cards"), pool: $("pool"), poolPanel: $("pool-panel"), poolTitle: $("pool-title"),
+  scorePanel: $("score-panel"), scoreTitle: $("score-title"), scoreN: $("score-n"),
+  scoreMsg: $("score-msg"), scoreHint: $("score-hint"),
+  submit: $("submit"), revealall: $("revealall"), again: $("again"), progress: $("progress"),
+  tagline: $("tagline"), howto: $("howto"), colophon: $("colophon"),
+  statsPanel: $("stats-panel"), statsTitle: $("stats-title"), statsTally: $("stats-tally"),
+  statsRows: $("stats-rows"), statsNote: $("stats-note"), statsReset: $("stats-reset")
+};
+
+function shuffle(a){
+  a = a.slice();
+  for (let i = a.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+  return a;
+}
+
+/* ---------- build ---------- */
+
+function buildCards(){
+  stopAudio();
+  cardEls.length = 0;
+  els.cards.innerHTML = "";
+  for (let i = 0; i < 7; i++){
+    const el = document.createElement("article");
+    el.className = "card";
+    el.innerHTML =
+      '<div class="spec">' +
+        '<canvas></canvas>' +
+        '<div class="tag">' + LETTERS[i] + '</div>' +
+        '<div class="verdict"></div>' +
+        '<div class="meta"></div>' +
+        '<div class="playhead"></div>' +
+        '<div class="loading"></div>' +
+      '</div>' +
+      '<div class="foot">' +
+        '<button class="play" type="button"><svg viewBox="0 0 10 12" aria-hidden="true"><path d="M0 0l10 6-10 6z"/></svg></button>' +
+        '<button class="slot" type="button"></button>' +
+      '</div>' +
+      '<div class="truth"></div>' +
+      '<div class="blurb"></div>';
+    el.querySelector(".play").addEventListener("click", (ev) => { ev.stopPropagation(); playCard(i); });
+    el.addEventListener("click", (ev) => {
+      if (ev.target.closest(".play")) return;
+      if (state.submitted){ playCard(i); return; }
+      onCardTap(i);
+    });
+    els.cards.appendChild(el);
+    cardEls.push(el);
+    paintOne(i);
+  }
+}
+
+function paintOne(i){
+  const el = cardEls[i];
+  if (!el) return;
+  const s = SOUNDS[state.order[i]];
+  const spec = specCache[s.id];
+  const loading = el.querySelector(".loading");
+  if (!spec){ if (loading) loading.textContent = prim(T.computing); return; }
+  if (loading && loading.parentNode) loading.parentNode.removeChild(loading);
+  paintCard(el.querySelector("canvas"), spec);
+}
+function repaintAll(){ for (let i = 0; i < cardEls.length; i++) paintOne(i); }
+
+/* ---------- interaction ---------- */
+
+function assignTo(card, soundIdx){
+  for (let k = 0; k < 7; k++) if (state.assign[k] === soundIdx) state.assign[k] = null;
+  state.assign[card] = soundIdx;
+  state.selChip = null; state.selCard = null;
+  renderGame();
+}
+function onCardTap(i){
+  if (state.selChip !== null){ assignTo(i, state.selChip); return; }
+  if (state.assign[i] !== null){
+    state.selChip = state.assign[i];
+    state.assign[i] = null;
+    state.selCard = null;
+    renderGame();
+    return;
+  }
+  state.selCard = state.selCard === i ? null : i;
+  renderGame();
+}
+function onChipTap(soundIdx){
+  if (state.selCard !== null){ assignTo(state.selCard, soundIdx); return; }
+  state.selChip = state.selChip === soundIdx ? null : soundIdx;
+  renderGame();
+}
+function reveal(i){
+  if (!state.submitted || state.revealed[i]) return;
+  state.revealed[i] = true;
+  renderGame();
+}
+/* ---------- visitor statistics ----------
+   Accumulated across rounds and kept in localStorage, so a day of an event
+   survives reloads. Storage can be unavailable (private windows, a browser
+   with site data blocked), so every access is guarded and falls back to an
+   in-memory tally that lasts as long as the tab does. */
+
+const STATS_KEY = "che-suono-e/stats/v1";
+let statsCache = null;
+
+function blankStats(){
+  const per = {};
+  for (const s of SOUNDS) per[s.id] = { shown: 0, right: 0 };
+  return { rounds: 0, per: per };
+}
+function loadStats(){
+  if (statsCache) return statsCache;
+  const st = blankStats();
+  let saved = null;
+  try { const raw = localStorage.getItem(STATS_KEY); if (raw) saved = JSON.parse(raw); } catch (err) {}
+  if (saved && saved.per){
+    st.rounds = saved.rounds | 0;
+    for (const s of SOUNDS){
+      const p = saved.per[s.id];
+      if (p){ st.per[s.id].shown = p.shown | 0; st.per[s.id].right = p.right | 0; }
+    }
+  }
+  statsCache = st;
+  return st;
+}
+function saveStats(st){
+  statsCache = st;
+  try { localStorage.setItem(STATS_KEY, JSON.stringify(st)); } catch (err) {}
+}
+function recordRound(){
+  const st = loadStats();
+  st.rounds++;
+  for (let c = 0; c < 7; c++){
+    const truth = state.order[c];
+    const p = st.per[SOUNDS[truth].id];
+    p.shown++;
+    if (state.assign[c] === truth) p.right++;
+  }
+  saveStats(st);
+}
+function resetStats(){
+  if (!window.confirm(prim(T.statsConfirm))) return;
+  statsCache = null;
+  try { localStorage.removeItem(STATS_KEY); } catch (err) {}
+  statsCache = blankStats();
+  renderGame();
+}
+
+function submitAnswers(){
+  if (state.assign.some((a) => a === null)) return;
+  state.submitted = true;
+  state.score = state.order.reduce((n, truth, i) => n + (state.assign[i] === truth ? 1 : 0), 0);
+  state.selChip = null; state.selCard = null;
+  recordRound();
+  renderGame();
+}
+function newRound(){
+  stopAudio();
+  state.order = shuffle([0, 1, 2, 3, 4, 5, 6]);
+  state.pool = shuffle([0, 1, 2, 3, 4, 5, 6]);
+  state.assign = new Array(7).fill(null);
+  state.revealed = new Array(7).fill(false);
+  state.selChip = null; state.selCard = null;
+  state.submitted = false; state.score = 0;
+  buildCards();
+  renderGame();
+}
+
+/* ---------- render ---------- */
+
+function renderStatic(){
+  document.getElementById("lang-it").setAttribute("aria-pressed", lang === "it");
+  document.getElementById("lang-en").setAttribute("aria-pressed", lang === "en");
+  els.tagline.innerHTML = bi(T.tagline);
+  els.howto.innerHTML = bi(T.howto);
+  els.poolTitle.innerHTML = bi(T.poolTitle, true);
+  els.scoreTitle.innerHTML = bi(T.scoreTitle, true);
+  els.statsTitle.innerHTML = bi(T.statsTitle, true);
+  els.submit.innerHTML = bi(T.submit, true);
+  els.revealall.innerHTML = bi(T.revealAll, true);
+  els.again.innerHTML = bi(T.again, true);
+  els.colophon.innerHTML = [T.colophon1, T.colophon2].map((c, i) =>
+    "<div" + (i ? " style='margin-top:.7em'" : "") + ">" + esc(prim(c)) + "</div><div>" + esc(sec(c)) + "</div>").join("");
+}
+
+function renderGame(){
+  // cards
+  for (let i = 0; i < 7; i++){
+    const el = cardEls[i];
+    if (!el) continue;
+    const truth = state.order[i], guess = state.assign[i];
+    const done = state.submitted && state.revealed[i];
+    const right = guess === truth;
+
+    el.classList.toggle("armed", !state.submitted);
+    el.classList.toggle("sel", !state.submitted && state.selCard === i);
+    el.classList.toggle("revealed", done);
+    el.classList.toggle("ok", done && right);
+    el.classList.toggle("bad", done && !right);
+
+    el.querySelector(".meta").textContent =
+      (lang === "it" ? "4,0 s" : "4.0 s") + " · 20 Hz – 11 kHz · Mel";
+
+    const slot = el.querySelector(".slot");
+    if (guess === null){
+      slot.className = "slot";
+      slot.innerHTML = '<span class="ph">' + esc(prim(T.slotEmpty)) + "</span>";
+    } else {
+      slot.className = "slot filled";
+      slot.innerHTML = bi(SOUNDS[guess].name);
+    }
+    slot.disabled = state.submitted;
+
+    el.querySelector(".verdict").textContent = done ? prim(right ? T.correct : T.wrong) : "";
+    el.querySelector(".truth").innerHTML = (done && !right)
+      ? '<span class="lbl">' + esc(prim(T.truth)) + "</span>" + esc(prim(SOUNDS[truth].name))
+      : "";
+    el.querySelector(".blurb").innerHTML = done
+      ? '<span>' + esc(prim(SOUNDS[truth].blurb)) + '</span><span class="s">' + esc(sec(SOUNDS[truth].blurb)) + "</span>"
+      : "";
+  }
+
+  // pool
+  els.pool.innerHTML = "";
+  const free = state.pool.filter((si) => !state.assign.includes(si));
+  if (state.submitted || free.length === 0){
+    if (!state.submitted){
+      const d = document.createElement("div");
+      d.className = "empty";
+      d.textContent = prim(T.poolEmpty);
+      els.pool.appendChild(d);
+    }
+  }
+  for (const si of free){
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "chip" + (state.selChip === si ? " sel" : "");
+    b.setAttribute("aria-pressed", state.selChip === si);
+    b.innerHTML = bi(SOUNDS[si].name);
+    b.addEventListener("click", () => onChipTap(si));
+    els.pool.appendChild(b);
+  }
+  els.poolPanel.hidden = state.submitted;
+
+  // actions
+  const n = state.assign.filter((a) => a !== null).length;
+  els.progress.hidden = state.submitted;
+  els.progress.textContent = lang === "it" ? (n + " / 7 abbinati") : (n + " / 7 matched");
+  els.submit.hidden = state.submitted;
+  els.submit.disabled = n < 7;
+  els.revealall.hidden = !state.submitted || state.revealed.every(Boolean);
+  els.again.hidden = !state.submitted;
+
+  renderStats();
+
+  // score
+  els.scorePanel.hidden = !state.submitted;
+  if (state.submitted){
+    els.scoreN.textContent = state.score;
+    const band = state.score === 7 ? 0 : state.score >= 5 ? 1 : state.score >= 3 ? 2 : 3;
+    els.scoreMsg.innerHTML = bi(T.scores[band]);
+    els.scoreHint.innerHTML = state.revealed.every(Boolean) ? "" : bi(T.hint);
+  }
+}
+
+/* The panel appears only once a round has been played, and only after the
+   visitor has submitted, so it never hints at an answer they are still on. */
+function renderStats(){
+  const st = loadStats();
+  els.statsPanel.hidden = !(state.submitted && st.rounds > 0);
+  if (els.statsPanel.hidden) return;
+
+  const avg = SOUNDS.reduce((n, s) => n + st.per[s.id].right, 0) / st.rounds;
+  els.statsTally.innerHTML = lang === "it"
+    ? "<b>" + st.rounds + "</b> " + (st.rounds === 1 ? "partita" : "partite") +
+      " \u00b7 media <b>" + avg.toFixed(1).replace(".", ",") + "</b> / 7"
+    : "<b>" + st.rounds + "</b> " + (st.rounds === 1 ? "round" : "rounds") +
+      " \u00b7 average <b>" + avg.toFixed(1) + "</b> / 7";
+
+  // hardest first: the interesting story is which image fools people
+  const rows = SOUNDS.map((s) => {
+    const p = st.per[s.id];
+    return { name: s.name, pct: p.shown ? p.right / p.shown : 0, shown: p.shown };
+  }).sort((a, b) => a.pct - b.pct);
+
+  // the hardest one gets called out by name: the best line an explainer has
+  const worst = rows[0];
+  if (st.rounds >= 3 && worst.shown > 0 && worst.pct < 0.7){
+    els.statsTally.innerHTML +=
+      '<div class="lead">' + esc(prim(T.statsHardest)) + ": <b>" + esc(prim(worst.name)) + "</b></div>";
+  }
+
+  els.statsRows.innerHTML = rows.map((r) => {
+    const pct = Math.round(r.pct * 100);
+    const cls = r.shown === 0 ? "" : pct >= 70 ? " hi" : pct < 40 ? " lo" : "";
+    return '<div class="srow' + cls + '">' +
+      '<div class="sname">' + esc(prim(r.name)) + '<span>' + esc(sec(r.name)) + '</span></div>' +
+      '<div class="sbar"><i style="width:' + pct + '%"></i></div>' +
+      '<div class="spct">' + pct + '%</div>' +
+    '</div>';
+  }).join("");
+
+  els.statsNote.textContent = prim(T.statsNote);
+  els.statsReset.textContent = prim(T.statsReset);
+}
+
+function setLang(l){ lang = l; renderStatic(); renderGame(); }
+
+/* ---------- generation ---------- */
+
+function decodeAudio(octx, bytes){
+  return new Promise((resolve, reject) => {
+    const maybe = octx.decodeAudioData(bytes, resolve, reject);   // Safari wants callbacks
+    if (maybe && typeof maybe.then === "function") maybe.then(resolve, reject);
+  });
+}
+
+/* trim or pad a decoded recording into the 4 s slot every card uses */
+function fitBuffer(x, mode){
+  let y;
+  if (x.length >= NS){
+    let start = 0;
+    if (mode === "peak"){                      // centre on the loudest 0.1 s
+      const k = Math.round(SR * 0.1);
+      let acc = 0;
+      for (let i = 0; i < k && i < x.length; i++) acc += x[i] * x[i];
+      let best = acc, at = 0;
+      for (let i = k; i < x.length; i++){
+        acc += x[i] * x[i] - x[i - k] * x[i - k];
+        if (acc > best){ best = acc; at = i - k; }
+      }
+      start = Math.max(0, Math.min(x.length - NS, at - (NS >> 1)));
+    } else if (mode === "end"){
+      start = x.length - NS;
+    }
+    y = x.slice(start, start + NS);
+  } else {
+    y = new Float32Array(NS);
+    y.set(x, Math.min(Math.round(0.25 * SR), NS - x.length));
+  }
+  return finish(y, 0.92);
+}
+
+async function loadSound(s){
+  const res = await fetch(s.src);
+  if (!res.ok) throw new Error(s.src + ": HTTP " + res.status);
+  const bytes = await res.arrayBuffer();
+  // decoding through a 22050 Hz context resamples the file to the game's rate
+  const OAC = window.OfflineAudioContext || window.webkitOfflineAudioContext;
+  const ab = await decodeAudio(new OAC(1, NS, SR), bytes);
+  const n = ab.length, ch = ab.numberOfChannels, mono = new Float32Array(n);
+  for (let c = 0; c < ch; c++){
+    const d = ab.getChannelData(c);
+    for (let i = 0; i < n; i++) mono[i] += d[i];
+  }
+  if (ch > 1) for (let i = 0; i < n; i++) mono[i] /= ch;
+  return fitBuffer(mono, s.fit);
+}
+
+function noticeSrcFailed(){
+  if (document.getElementById("srcfail")) return;
+  const d = document.createElement("div");
+  d.className = "notice"; d.id = "srcfail";
+  d.innerHTML = bi(T.srcfail);
+  document.querySelector(".game").before(d);
+}
+
+async function generate(){
+  let failed = false;
+  for (const s of SOUNDS){
+    let buf = null;
+    if (s.src){
+      try { buf = await loadSound(s); }
+      catch (err){ console.warn("using the synthesized " + s.id + " instead", err); failed = true; }
+    }
+    bufCache[s.id] = buf || s.synth();
+    specCache[s.id] = spectrogram(bufCache[s.id], s.dr);
+    for (let c = 0; c < 7; c++)
+      if (state.order[c] !== undefined && SOUNDS[state.order[c]].id === s.id) paintOne(c);
+    await new Promise(r => requestAnimationFrame(r));
+  }
+  if (failed) noticeSrcFailed();
+}
+
+/* ---------- wiring ---------- */
+
+$("lang-it").addEventListener("click", () => setLang("it"));
+$("lang-en").addEventListener("click", () => setLang("en"));
+els.submit.addEventListener("click", submitAnswers);
+els.again.addEventListener("click", newRound);
+els.statsReset.addEventListener("click", resetStats);
+els.revealall.addEventListener("click", () => {
+  for (let i = 0; i < 7; i++) state.revealed[i] = true;
+  renderGame();
+});
+
+let rz;
+window.addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(repaintAll, 140); });
+
+/* ---------- boot ---------- */
+
+renderStatic();
+newRound();
+generate();
+</script>
+
+</body></html>

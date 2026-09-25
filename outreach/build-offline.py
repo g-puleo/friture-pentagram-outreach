@@ -17,7 +17,7 @@
 
 """Build the single-file offline version of the spectrogram game.
 
-che-suono-e.html pulls IBM Plex from Google Fonts and reads its two real
+che-suono-e.src.html pulls IBM Plex from Google Fonts and reads its real
 recordings from sounds/. Neither works at an outreach event: the machine often
 has no network, and browsers refuse to fetch sounds/ when the page is opened
 straight from disk as a file:// URL.
@@ -28,7 +28,7 @@ nothing but a browser.
 
     python3 outreach/build-offline.py
 
-Writes che-suono-e.offline.html next to the source. Requires a network
+Writes che-suono-e.html next to the source. Requires a network
 connection at build time only.
 """
 
@@ -42,8 +42,8 @@ import sys
 import urllib.request
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-SOURCE = os.path.join(HERE, "che-suono-e.html")
-TARGET = os.path.join(HERE, "che-suono-e.offline.html")
+SOURCE = os.path.join(HERE, "che-suono-e.src.html")
+TARGET = os.path.join(HERE, "che-suono-e.html")
 
 # Google serves one @font-face per unicode subset; these two cover Italian and
 # English, and dropping the rest saves about 1.5 MB.
