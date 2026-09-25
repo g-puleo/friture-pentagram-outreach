@@ -49,3 +49,5 @@ Notepad++
 *.dmg
 # GWOSC strain cache, re-downloaded by outreach/make-gw170817.py
 outreach/*.hdf5
+# GWOSC sonifications are committed verbatim, despite the *.wav rule above
+!outreach/sounds/gwosc/*.wav

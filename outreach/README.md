@@ -24,15 +24,21 @@ sounds and shows a notice saying so. To work on it, serve it:
 
 ## The sounds
 
-Seven, all 4 seconds at 22,050 Hz. Five are synthesized by the page itself in
-plain JavaScript — a hand clap, rain, a bird chirping, an orchestra and a
-whistle. Two are real recordings loaded from `sounds/`; see `sounds/CREDITS.md`
-for their provenance and licences.
+Seven, all 4 seconds at 22,050 Hz. Five are real recordings loaded from
+`sounds/` — a Northern cardinal, rain, GW170817, the opening of Beethoven's
+Fifth, and a sneeze. Two are synthesized by the page itself in plain
+JavaScript — the hand clap and the whistle. See `sounds/CREDITS.md` for the
+provenance and licence of every recording; **the cardinal's attribution line is
+still a placeholder** and must be completed before the page is published.
+
+`sounds/gwosc/` holds four GWOSC sonifications that the game does not use, kept
+as alternative material for the GW card; `sounds/CREDITS.md` explains the
+trade-off.
 
 Each entry in the `SOUNDS` array carries an `id`, a `synth()` function, and
 optionally a `src` (a file under `sounds/`) plus a `fit` mode saying how to cut
 it down to the four-second slot — `peak` centres on the loudest moment, `end`
-keeps the tail. When `src` is present the page fetches and decodes it, resampling
+keeps the tail, `start` takes it from the beginning. When `src` is present the page fetches and decodes it, resampling
 through a 22,050 Hz `OfflineAudioContext`; **if that fails for any reason it
 falls back to `synth()`**, so the game always works. To swap in another recording,
 drop a file in `sounds/` and set `src`; no game logic changes.
@@ -95,8 +101,12 @@ the repository. The embedded and bundled third-party material is not:
 | What | Licence |
 |---|---|
 | IBM Plex, embedded in the offline build | SIL Open Font License 1.1 — see `IBM-Plex-OFL.txt` |
+| `sounds/bird-cardinal.ogg` | Creative Commons (Xeno-canto XC1151504) — **variant and recordist still to be recorded** |
+| `sounds/rain.ogg` | Public domain (Wikimedia Commons) |
+| `sounds/orchestra-beethoven5.ogg` | Public domain (Wikimedia Commons) |
 | `sounds/sneeze.ogg` | Public domain (Wikimedia Commons) |
 | `sounds/gw170817-h1.ogg`, derived from LIGO open data | CC BY 4.0 (GWOSC) |
+| `sounds/gwosc/*.wav`, not used by the game | CC BY 4.0 (GWOSC) |
 
 GWOSC asks that use of their data be acknowledged, and the page carries the
 acknowledgement in its footer:
